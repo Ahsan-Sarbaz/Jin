@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Application.h"
+#include "Shader.h"
 
 int main()
 {
@@ -12,6 +13,8 @@ int main()
 	
 	if (!app.Init(config)) return 1;
 	if (!app.Run()) return 2;
+
+	Shader s("shaders/vs.glsl", "shader/fs.glsl");
 
 	while (app.IsOpen())
 	{
