@@ -11,7 +11,7 @@ int main()
 	config.width = 800;
 	config.height = 600;
 	config.title = "Window";
-	config.vsync = 1;
+	config.vsync = 0;
 	
 	if (!app.Init(config)) return 1;
 	if (!app.Run()) return 2;
@@ -25,8 +25,13 @@ int main()
 	{
 		app.PollEvents();
 		app.Tick();
-		renderer.DrawQuad({ 0,0,0 }, { 100,100,1 }, { 0,1,1,1 });
-		renderer.DrawQuad({ 500,100,0 }, { 100,100,1 }, { 0,0,1,1 });
+		for (int x = 0; x < 8; ++x)
+		{
+			for (int y = 0; y < 100; ++y)
+			{
+				renderer.DrawQuad({ 7 * x, 7 * y,0 }, { 14,14,1 }, { 1,x*0.2f,y*0.2f,1 });
+			}
+		}
 		app.SwapBuffers();
 	}
 }

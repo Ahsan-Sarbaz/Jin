@@ -30,6 +30,7 @@ bool Application::Init(const ApplicationConfiguration& config)
 
 bool Application::Run()
 {
+	glfwSwapInterval(m_appConfig.vsync ? 1 : 0);
 	return true;
 }
 
