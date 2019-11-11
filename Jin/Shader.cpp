@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const char* vspath, const char* fspath)
 {
@@ -22,7 +23,7 @@ Shader::Shader(const char* vspath, const char* fspath)
 	glLinkProgram(m_ID);
 
 	int success;
-	char* infoLog;
+	char infoLog[512];
 	glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
 	if (!success)
 	{
@@ -34,7 +35,17 @@ Shader::Shader(const char* vspath, const char* fspath)
 	glDeleteShader(fsId);
 }
 
-std::string Shader::ReadShaderFile(const char* path)
+void Shader::Bind()
+{
+	glUseProgram(m_ID);
+}
+
+void Shader::Unbind()
+{
+	glUseProgram(0);
+}
+
+const std::string Shader::ReadShaderFile(const char* path)
 {
 	std::ifstream file(path);
 	std::stringstream ss;
@@ -47,12 +58,12 @@ int Shader::CompileShader(const char* source, ShaderType type)
 {
 	int shader = glCreateShader(type);
 	
-	glShaderSource(shader, 1, &source, 0);
+	glShaderSource(shader, 1, &source,  0);
 	
 	glCompileShader(shader);
 
 	int success;
-	char* infoLog;
+	char infoLog[512];
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
@@ -96,5 +107,35 @@ void Shader::SetUniformFloat(const char* name, float x, float y, float z)
 void Shader::SetUniformFloat(const char* name, float x, float y, float z, float w)
 {
 	glUniform4f(GetUniformLocation(name), x, y, z, w);
+}
+
+void Shader::SetUniformVec2(const char* name, const glm::vec2& x)
+{
+	glUniform2fv(GetUniformLocation(name), 1, glm::value_ptr(x));
+}
+
+void Shader::SetUniformVec3(const char* name, const glm::vec3& x)
+{
+	glUniform3fv(GetUniformLocation(name), 1, glm::value_ptr(x));
+}
+
+void Shader::SetUniformVec4(const char* name, const glm::vec4& x)
+{
+	glUniform4fv(GetUniformLocation(name), 1, glm::value_ptr(x));
+}
+
+void Shader::SetUniformMat2(const char* name, const glm::mat2& x)
+{
+	glUniformMatrix2fv(GetUniformLocation(name), 1, false, glm::value_ptr(x));
+}
+
+void Shader::SetUniformMat3(const char* name, const glm::mat3& x)
+{
+	glUniformMatrix2fv(GetUniformLocation(name), 1, false, glm::value_ptr(x));
+}
+
+void Shader::SetUniformMat4(const char* name, const glm::mat4& x)
+{
+	glUniformMatrix4fv(GetUniformLocation(name), 1, false, glm::value_ptr(x));
 }
 

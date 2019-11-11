@@ -21,6 +21,10 @@ bool Application::Init(const ApplicationConfiguration& config)
 
 	m_isOpen = true;
 
+	glfwSetWindowSizeCallback(m_window.GetHandle(), [](GLFWwindow* window, int width, int height) {
+		glViewport(0, 0, width, height);
+	});
+
 	return true;
 }
 
