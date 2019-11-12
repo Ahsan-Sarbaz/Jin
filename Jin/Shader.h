@@ -16,7 +16,7 @@ class Shader
 private:
 	int m_ID;
 	std::unordered_map<const char*, int> m_uniformCache;
-
+	bool m_bound;
 public:
 	Shader(const char* vspath, const char* fspath);
 

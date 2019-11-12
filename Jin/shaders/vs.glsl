@@ -5,7 +5,10 @@ layout(location = 1) in vec2 texCoord;
 uniform mat4 u_Tranform;
 uniform mat4 u_Projection;
 
+out vec2 o_texCoord;
+
 void main()
 {
+	o_texCoord = texCoord;
 	gl_Position = u_Projection * u_Tranform * vec4(position, 1);
 }

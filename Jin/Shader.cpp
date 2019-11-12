@@ -37,12 +37,20 @@ Shader::Shader(const char* vspath, const char* fspath)
 
 void Shader::Bind()
 {
-	glUseProgram(m_ID);
+	if (!m_bound)
+	{
+		glUseProgram(m_ID);
+		m_bound = true;
+	}
 }
 
 void Shader::Unbind()
 {
-	glUseProgram(0);
+	if (m_bound)
+	{
+		glUseProgram(0);
+		m_bound = false;
+	}
 }
 
 const std::string Shader::ReadShaderFile(const char* path)

@@ -44,15 +44,63 @@ void Renderer2D::Init(RendererConfig& config)
 	
 }
 
+void Renderer2D::BeginScene()
+{
+	m_shader->Bind();	
+	m_shader->SetUniformMat4("u_Projection", m_config.projectionMatrix);
+}
+
+void Renderer2D::EndScene()
+{
+	m_shader->Unbind();
+}
+
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color)
 {
-	m_shader->Bind();
 	m_shader->SetUniformVec4("u_Color", color);
 
 	glm::mat4 transformation = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
-	m_shader->SetUniformMat4("u_Projection", m_config.projectionMatrix);
 	m_shader->SetUniformMat4("u_Tranform", transformation);
 
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const Texture& texture)
+{
+	m_shader->SetUniformVec4("u_Color", {1,1,1,1});
+
+	glm::mat4 transformation = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
+	m_shader->SetUniformMat4("u_Tranform", transformation);
+	texture.Bind();
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void Renderer2D::DrawQuad(const glm::mat4& transform, const Texture& texture)
+{
+	m_shader->SetUniformVec4("u_Color", {1,1,1,1});
+
+	m_shader->SetUniformMat4("u_Tranform", transform);
+	texture.Bind();
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+
+void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+{
+	m_shader->SetUniformVec4("u_Color", color);
+
+	m_shader->SetUniformMat4("u_Tranform", transform);
+
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void Renderer2D::Clear(const glm::vec4& clearColor)
+{
+	m_clearColor = clearColor;
+	glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
