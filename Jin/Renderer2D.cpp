@@ -77,22 +77,22 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, cons
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-void Renderer2D::DrawQuad(const glm::mat4& transform, const Texture& texture)
+void Renderer2D::DrawQuad(const Transform& transform, const Texture& texture)
 {
 	m_shader->SetUniformVec4("u_Color", {1,1,1,1});
 
-	m_shader->SetUniformMat4("u_Tranform", transform);
+	m_shader->SetUniformMat4("u_Tranform", transform.GetTransform());
 	texture.Bind();
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 
-void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+void Renderer2D::DrawQuad(const Transform& transform, const glm::vec4& color)
 {
 	m_shader->SetUniformVec4("u_Color", color);
 
-	m_shader->SetUniformMat4("u_Tranform", transform);
+	m_shader->SetUniformMat4("u_Tranform", transform.GetTransform());
 
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

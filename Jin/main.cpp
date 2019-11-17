@@ -2,8 +2,6 @@
 #include "Application.h"
 #include "Renderer2D.h"
 #include <glm\ext\matrix_clip_space.hpp>
-#include <glm/ext/matrix_transform.hpp>
-#include "Texture.h"
 
 int main()
 {
@@ -26,6 +24,10 @@ int main()
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { 0,0,0 }) * glm::scale(glm::mat4(1.0f), {14, 14, 1});
 	Texture t("textures/test.png");
 
+	Transform trans;
+	trans.SetPosition({ 400, 300, 0 });
+	trans.SetScale({700,700,1});
+
 	while (app.IsOpen())
 	{
 		app.PollEvents();
@@ -33,7 +35,7 @@ int main()
 
 		renderer.Clear({0.8f, 0.8f, 0.8f, 1.0f});
 		renderer.BeginScene();
-		renderer.DrawQuad({ 400, 300, 0 }, { 750, 550, 1 }, t);
+		renderer.DrawQuad(trans, t);
 		
 		renderer.EndScene();
 

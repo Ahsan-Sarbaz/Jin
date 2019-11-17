@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Transform.h"
 #include <glm/glm.hpp>
 
 class Renderer2D :
@@ -20,8 +21,8 @@ public:
 	void EndScene();
 	void DrawQuad(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color);
 	void DrawQuad(const glm::vec3& position, const glm::vec3& size, const Texture& texture);
-	void DrawQuad(const glm::mat4& transform, const Texture& texture);
-	void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+	void DrawQuad(const Transform& transform, const Texture& texture);
+	void DrawQuad(const Transform& transform, const glm::vec4& color);
 	void Clear(const glm::vec4& clearColor);
 };
 
