@@ -11,4 +11,5 @@ class Renderer
 public:
 	RendererConfig m_config;
 	virtual void Init(RendererConfig& config) = 0;
+	void SetRenedererConfig(RendererConfig& config) { m_config = config; }
 };

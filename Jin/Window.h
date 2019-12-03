@@ -17,7 +17,8 @@ public:
 	Window();
 
 	bool Init(const WindowConfig& config);
+	void Tick();
 
 	inline GLFWwindow* GetHandle() const { return m_windowHandle; }
-	inline WindowConfig* GetWindowConfig() { return &m_windowConfig; }
+	const WindowConfig& GetWindowConfig() const { return m_windowConfig; }
 };

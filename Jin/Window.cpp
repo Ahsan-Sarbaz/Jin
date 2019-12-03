@@ -31,3 +31,8 @@ bool Window::Init(const WindowConfig& config)
 
 	return true;
 }
+
+void Window::Tick()
+{
+	glfwGetWindowSize(m_windowHandle, &m_windowConfig.width, &m_windowConfig.height);
+}

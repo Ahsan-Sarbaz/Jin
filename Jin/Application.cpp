@@ -1,4 +1,7 @@
 #include "Application.h"
+#include <glm/glm.hpp>
+#include <glm\ext\matrix_clip_space.hpp>
+#include "Renderer.h"
 
 Application::Application()
 {
@@ -10,6 +13,11 @@ Application::~Application()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+}
+
+static void window_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 
 bool Application::Init(const ApplicationConfiguration& config)
@@ -29,9 +37,7 @@ bool Application::Init(const ApplicationConfiguration& config)
 
 	m_isOpen = true;
 
-	glfwSetWindowSizeCallback(m_window.GetHandle(), [](GLFWwindow* window, int width, int height) {
-		glViewport(0, 0, width, height);
-	});
+	glfwSetWindowSizeCallback(m_window.GetHandle(), window_size_callback);
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
@@ -65,6 +71,7 @@ bool Application::IsOpen()
 void Application::Tick()
 {
 	m_isOpen = !glfwWindowShouldClose(m_window.GetHandle());
+	m_window.Tick();
 
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();

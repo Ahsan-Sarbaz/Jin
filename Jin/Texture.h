@@ -12,4 +12,6 @@ public:
 
 	void Bind(unsigned int slot = 0) const;
 	void Unbind();
+
+	unsigned int GetID() const { return m_Id; }
 };

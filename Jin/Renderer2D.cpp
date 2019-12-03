@@ -46,10 +46,10 @@ void Renderer2D::Init(RendererConfig& config)
 
 }
 
-void Renderer2D::BeginScene()
+void Renderer2D::BeginScene(Scene& scene)
 {
 	m_shader->Bind();	
-	m_shader->SetUniformMat4("u_Projection", m_config.projectionMatrix);
+	m_shader->SetUniformMat4("u_Projection", scene.GetProjection());
 }
 
 void Renderer2D::EndScene()
@@ -68,12 +68,33 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, cons
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
+void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color, const Texture& texture)
+{
+	m_shader->SetUniformVec4("u_Color", color);
+
+	glm::mat4 transformation = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
+	m_shader->SetUniformMat4("u_Tranform", transformation);
+	texture.Bind();
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const Texture& texture)
 {
 	m_shader->SetUniformVec4("u_Color", {1,1,1,1});
 
 	glm::mat4 transformation = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
 	m_shader->SetUniformMat4("u_Tranform", transformation);
+	texture.Bind();
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void Renderer2D::DrawQuad(const Transform& transform, const glm::vec4& color, const Texture& texture)
+{
+	m_shader->SetUniformVec4("u_Color", color);
+
+	m_shader->SetUniformMat4("u_Tranform", transform.GetTransform());
 	texture.Bind();
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

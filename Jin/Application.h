@@ -20,6 +20,7 @@ private:
 	ApplicationConfiguration m_appConfig;
 	Window m_window;
 	bool m_isOpen;
+
 public:
 	Application();
 	~Application();
@@ -31,6 +32,7 @@ public:
 	void Tick();
 	void SwapBuffers();
 	void PollEvents();
+	const Window& GetWindow() const { return m_window; }
 
 private:
 	bool InitGLEW();
