@@ -21,6 +21,7 @@ int main()
 	RendererConfig rendererConfig = {};
 	rendererConfig.projectionMatrix = glm::ortho(0.0f, (float)config.width, (float)config.height, 0.0f, -1.0f, 1.0f);
 	renderer.Init(rendererConfig);
+	bool show_demo_window = true;
 
 	while (app.IsOpen())
 	{
@@ -30,6 +31,9 @@ int main()
 		renderer.Clear({0.8f, 0.8f, 0.8f, 1.0f});
 		
 		renderer.BeginScene();
+
+		if (show_demo_window)
+			ImGui::ShowDemoWindow(&show_demo_window);
 
 		renderer.EndScene();
 

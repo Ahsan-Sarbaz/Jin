@@ -1,6 +1,9 @@
 #pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include "Window.h"
 
@@ -19,6 +22,7 @@ private:
 	bool m_isOpen;
 public:
 	Application();
+	~Application();
 
 	bool Init(const ApplicationConfiguration& config);
 	bool Run();
