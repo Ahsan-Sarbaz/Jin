@@ -2,6 +2,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include "Shader.h"
 
+
 Renderer2D::Renderer2D()
 {
 
@@ -40,8 +41,9 @@ void Renderer2D::Init(RendererConfig& config)
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
-	m_shader = new Shader("shaders/vs.glsl", "shaders/fs.glsl");
 	
+	m_shader = new Shader("shaders/vs.glsl", "shaders/fs.glsl");
+
 }
 
 void Renderer2D::BeginScene()
