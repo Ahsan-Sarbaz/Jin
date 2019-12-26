@@ -2,9 +2,13 @@
 #include <glm/glm.hpp>
 #include <glm\ext\matrix_clip_space.hpp>
 #include "Renderer.h"
+#include "Time.h"
+
+Application* Application::m_instance = nullptr;
 
 Application::Application()
 {
+	m_instance = this;
 }
 
 Application::~Application()
@@ -52,6 +56,9 @@ bool Application::Init(const ApplicationConfiguration& config)
 	ImGui_ImplGlfw_InitForOpenGL(m_window.GetHandle(), true);
 	ImGui_ImplOpenGL3_Init("#version 130");
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEPTH_TEST);
 
 	return true;
 }
@@ -70,8 +77,17 @@ bool Application::IsOpen()
 
 void Application::Tick()
 {
+	float time = (float)glfwGetTime();
+	float dt = time - m_lastFrameTime;
+	m_lastFrameTime = time;
+	Time::Get()->SetDeltaTime(dt);
+	
+
 	m_isOpen = !glfwWindowShouldClose(m_window.GetHandle());
 	m_window.Tick();
+
+	m_appConfig.width = m_window.GetWindowConfig().width;
+	m_appConfig.height = m_window.GetWindowConfig().height;
 
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();

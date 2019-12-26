@@ -3,15 +3,17 @@
 #include <glm\ext\matrix_clip_space.hpp>
 #include <glm\gtc\type_ptr.hpp>
 #include "Window.h"
+#include "Camera.h"
 
 class Scene
 {
 private:
-	glm::mat4 m_projection;
+	Camera* m_camera;
+
 public:
 
-	void SetProjection(const glm::mat4& proj) { m_projection = proj; }
-	const glm::mat4& GetProjection() { return m_projection; }
+	void SetCamera(Camera* cam) { m_camera = cam; }
+	Camera* GetCamera() { return m_camera; }
 
 	void Update(const Window& window);
 };

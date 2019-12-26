@@ -1,19 +1,20 @@
 #include <iostream>
 #include "Application.h"
 #include "Renderer2D.h"
-#include <glm\ext\matrix_clip_space.hpp>
 #include <glm\gtc\type_ptr.hpp>
 #include "Input.h"
+#include "PerspectiveCamera.h"
+
 
 int main()
 {
 	Application app;
 	ApplicationConfiguration config = {};
 	
-	config.width = 1280;
-	config.height = 1024;
+	config.width = 1920;
+	config.height = 1080;
 	config.title = "Window";
-	config.vsync = 1;
+	config.vsync = 0;
 	
 	if (!app.Init(config)) return 1;
 	if (!app.Run()) return 2;
@@ -25,16 +26,18 @@ int main()
 	bool show_properties = true;
 	glm::vec4 clearColor = {0.8f,0.8f,0.8f,1};
 
-	glm::vec3 position = {400,300,0};
+	glm::vec3 position = {400,300, 0};
 	glm::vec3 size = {800,600,1};
 	glm::vec4 color = {1,1,1,1};
 
 	Texture t("textures\\test.png");
 
 	Scene scene;
-	auto projection = glm::ortho(0.0f, (float)config.width, (float)config.height, 0.0f, -1.0f, 1.0f);
-	scene.SetProjection(projection);
 
+	OrthographicCamera cam(1920, 1080);
+	scene.SetCamera(&cam);
+
+	
 	while (app.IsOpen())
 	{
 		app.PollEvents();
@@ -60,9 +63,9 @@ int main()
 			
 			ImGui::End();
 		}
-
+	
 		renderer.DrawQuad(position, size, color, t);
-
+ 
 		renderer.EndScene();
 
 		app.SwapBuffers();

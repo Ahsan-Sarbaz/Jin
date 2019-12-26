@@ -126,15 +126,27 @@ MENU               = 348,
 LAST_KEY
 };
 
+enum JinMouseButton
+{
+	MOUSE_BUTTON_1 = 0,
+	MOUSE_BUTTON_2 = 1,
+	MOUSE_BUTTON_3 = 2,
+	MOUSE_BUTTON_4 = 3,
+	MOUSE_BUTTON_5 = 4,
+	MOUSE_BUTTON_6 = 5,
+	MOUSE_BUTTON_7 = 6,
+	MOUSE_BUTTON_8 = 7,
+	MOUSE_BUTTON_LAST = MOUSE_BUTTON_8,
+	MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1,
+	MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2,
+	MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3,
+};
+
 class Input
 {
 private:
-	float m_mouseX;
-	float m_mouseY;
 	static Input* m_instance;
-	static bool m_keyDown[JinKey::LAST_KEY];
-	static bool m_keyRepeat[JinKey::LAST_KEY];
-
+	
 public:
 	Input();
 
@@ -144,16 +156,9 @@ public:
 		return *m_instance;
 	}
 
-	float GetMouseX() { return m_mouseX; }
-	float GetMouseY() { return m_mouseY; }
+	static float GetMouseX();
+	static float GetMouseY();
 
-	void SetMouseX(float x) { m_mouseX = x; }
-	void SetMouseY(float y) { m_mouseY = y; }
-
-	bool IsKeyDown(JinKey key);
-	bool IsKeyUp(JinKey key);
-	bool IsKeyRepeat(JinKey key);
-
-	void SetKeyDown(JinKey key, bool state) { m_keyDown[key] = state; }
-	void SetKeyRepeat(JinKey key, bool state) { m_keyRepeat[key] = state; }
+	static bool IsKeyPressed(JinKey key);
+	static bool IsMouseButtonPressed(JinMouseButton button);
 };

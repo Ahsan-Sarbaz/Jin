@@ -5,7 +5,9 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#include "OrthographicCamera.h"
 #include "Window.h"
+
 
 struct ApplicationConfiguration
 {
@@ -17,13 +19,17 @@ struct ApplicationConfiguration
 class Application
 {
 private:
+	static Application* m_instance;
 	ApplicationConfiguration m_appConfig;
 	Window m_window;
 	bool m_isOpen;
+	float m_lastFrameTime = 0.0f;
 
 public:
 	Application();
 	~Application();
+
+	static Application* Get() { return m_instance; }
 
 	bool Init(const ApplicationConfiguration& config);
 	bool Run();

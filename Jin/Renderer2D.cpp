@@ -49,7 +49,7 @@ void Renderer2D::Init(RendererConfig& config)
 void Renderer2D::BeginScene(Scene& scene)
 {
 	m_shader->Bind();	
-	m_shader->SetUniformMat4("u_Projection", scene.GetProjection());
+	m_shader->SetUniformMat4("u_Projection", scene.GetCamera()->GetViewProjectionMatrix());
 }
 
 void Renderer2D::EndScene()
@@ -123,7 +123,11 @@ void Renderer2D::DrawQuad(const Transform& transform, const glm::vec4& color)
 
 void Renderer2D::Clear(const glm::vec4& clearColor)
 {
-	m_clearColor = clearColor;
-	glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
+	if (m_clearColor != clearColor)
+	{
+		m_clearColor = clearColor;
+		glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
+	}
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

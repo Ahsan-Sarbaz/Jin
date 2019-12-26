@@ -1,25 +1,40 @@
+#include "Application.h"
 #include "Input.h"
 
 Input* Input::m_instance = nullptr;
-bool Input::m_keyDown[] = {};
-bool Input::m_keyRepeat[] = {};
 
 Input::Input()
 {
 	m_instance = this;
 }
 
-bool Input::IsKeyDown(JinKey key)
+float Input::GetMouseX()
 {
-	return m_keyDown[key];
+	auto window = Application::Get()->GetWindow().GetHandle();
+	double xpos, ypos;
+	glfwGetCursorPos(window, &xpos, &ypos);
+	return (float)xpos;
 }
 
-bool Input::IsKeyUp(JinKey key)
+float Input::GetMouseY()
 {
-	return !m_keyDown[key];
+	auto window = Application::Get()->GetWindow().GetHandle();
+	double xpos, ypos;
+	glfwGetCursorPos(window, &xpos, &ypos);
+	return (float)ypos;
 }
 
-bool Input::IsKeyRepeat(JinKey key)
+bool Input::IsKeyPressed(JinKey key)
 {
-	return m_keyRepeat[key];
+	auto window = Application::Get()->GetWindow().GetHandle();
+	auto state = glfwGetKey(window, key);
+	return state == GLFW_PRESS || state == GLFW_REPEAT;
 }
+
+bool Input::IsMouseButtonPressed(JinMouseButton button)
+{	
+	auto window = Application::Get()->GetWindow().GetHandle();
+	auto state = glfwGetMouseButton(window, button);
+	return state == GLFW_PRESS || state == GLFW_REPEAT;
+}
+
