@@ -1,11 +1,24 @@
 #version 440 core
 out vec4 FinalColor;
 
-uniform vec4 u_Color;
+struct Material
+{
+	vec4 Diffuse;
+	int TextureBound;
+	sampler2D Texture;
+};
+
+uniform Material mat;
 in vec2 o_texCoord;
-uniform sampler2D u_texture;
 
 void main()
 {
-	FinalColor = texture(u_texture, o_texCoord) * vec4(u_Color);
+	if(mat.TextureBound == 1)
+	{
+		FinalColor = texture(mat.Texture, o_texCoord) * vec4(mat.Diffuse);
+	}
+	else
+	{
+		FinalColor = vec4(mat.Diffuse);
+	}
 }

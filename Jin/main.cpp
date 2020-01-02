@@ -14,7 +14,7 @@ int main()
 	config.width = 1920;
 	config.height = 1080;
 	config.title = "Window";
-	config.vsync = 0;
+	config.vsync = 1;
 	
 	if (!app.Init(config)) return 1;
 	if (!app.Run()) return 2;
@@ -35,7 +35,14 @@ int main()
 	Scene scene;
 
 	OrthographicCamera cam(1920, 1080);
+	PerspectiveCamera perspectiveCam(1920, 1080, 0.1f, 100, 90);
+
 	scene.SetCamera(&cam);
+	bool perspective = false;
+
+	Material mat;
+	mat.SetDiffuse(color);
+	mat.SetTexture(t);
 
 	
 	while (app.IsOpen())
@@ -45,6 +52,17 @@ int main()
 
 		renderer.Clear(clearColor);
 		
+		if (perspective)
+		{
+			scene.SetCamera(&perspectiveCam);
+		}
+		else
+		{
+			scene.SetCamera(&cam);
+			position.z = 0;
+
+		}
+
 		scene.Update(app.GetWindow());
 
 		renderer.BeginScene(scene);
@@ -56,15 +74,17 @@ int main()
 			ImGui::Text("Framerate : %f", ImGui::GetIO().Framerate);
 			ImGui::SliderFloat3("Position", glm::value_ptr(position), 0, 800);
 			ImGui::SliderFloat3("Size", glm::value_ptr(size), 1, 10000);
-			ImGui::ColorEdit4("Color", glm::value_ptr(color));
+			ImGui::ColorEdit4("Color", glm::value_ptr(mat.GetDiffuse()));
 			ImGui::ColorEdit4("Clear Color", glm::value_ptr(clearColor));
 			ImGui::Text("Texture");
-			ImGui::Image((ImTextureID)t.GetID(), { 100,100 });
+			ImGui::Image((ImTextureID)mat.GetTexture().GetID(), { 100,100 });
 			
+			ImGui::Checkbox("Perspective", &perspective);
+
 			ImGui::End();
 		}
 	
-		renderer.DrawQuad(position, size, color, t);
+		renderer.DrawQuad(position, size, mat);
  
 		renderer.EndScene();
 

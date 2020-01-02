@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "Transform.h"
 #include "Scene.h"
+#include "Material.h"
 
 class Renderer2D :
 	public Renderer
@@ -20,12 +21,8 @@ public:
 
 	void BeginScene(Scene& s);
 	void EndScene();
-	void DrawQuad(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color);
-	void DrawQuad(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color, const Texture& texture);
-	void DrawQuad(const glm::vec3& position, const glm::vec3& size, const Texture& texture);
-	void DrawQuad(const Transform& transform, const glm::vec4& color, const Texture& texture);
-	void DrawQuad(const Transform& transform, const Texture& texture);
-	void DrawQuad(const Transform& transform, const glm::vec4& color);
+	void DrawQuad(const glm::vec3& position, const glm::vec3& size, const Material& material);
+	void DrawQuad(const Transform& transform, const Material& material);
 	void Clear(const glm::vec4& clearColor);
 };
 

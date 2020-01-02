@@ -57,69 +57,47 @@ void Renderer2D::EndScene()
 	m_shader->Unbind();
 }
 
-void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color)
+void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const Material& material)
 {
-	m_shader->SetUniformVec4("u_Color", color);
+	m_shader->SetUniformVec4("mat.Diffuse", material.GetDiffuse());
 
 	glm::mat4 transformation = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
 	m_shader->SetUniformMat4("u_Tranform", transformation);
-
+	if (material.HasTexture())
+	{
+		m_shader->SetUniformInt("mat.TextureBound", 1);
+		m_shader->SetUniformInt("mat.Texture", material.GetTexture().GetSlot());
+		material.GetTexture().Bind();
+	}
+	else
+	{
+		m_shader->SetUniformInt("mat.TextureBound", 0);
+	}
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color, const Texture& texture)
+void Renderer2D::DrawQuad(const Transform& transform, const Material& material)
 {
-	m_shader->SetUniformVec4("u_Color", color);
-
-	glm::mat4 transformation = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
-	m_shader->SetUniformMat4("u_Tranform", transformation);
-	texture.Bind();
-	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-}
-
-void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const Texture& texture)
-{
-	m_shader->SetUniformVec4("u_Color", {1,1,1,1});
-
-	glm::mat4 transformation = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
-	m_shader->SetUniformMat4("u_Tranform", transformation);
-	texture.Bind();
-	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-}
-
-void Renderer2D::DrawQuad(const Transform& transform, const glm::vec4& color, const Texture& texture)
-{
-	m_shader->SetUniformVec4("u_Color", color);
+	m_shader->SetUniformVec4("mat.Diffuse", material.GetDiffuse());
 
 	m_shader->SetUniformMat4("u_Tranform", transform.GetTransform());
-	texture.Bind();
+	
+	if (material.HasTexture())
+	{
+		m_shader->SetUniformInt("mat.TextureBound", 1);
+		m_shader->SetUniformInt("mat.Texture", material.GetTexture().GetSlot());
+		material.GetTexture().Bind();
+	}
+	else
+	{
+		m_shader->SetUniformInt("mat.TextureBound", 0);
+	}
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-void Renderer2D::DrawQuad(const Transform& transform, const Texture& texture)
-{
-	m_shader->SetUniformVec4("u_Color", {1,1,1,1});
 
-	m_shader->SetUniformMat4("u_Tranform", transform.GetTransform());
-	texture.Bind();
-	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-}
-
-
-void Renderer2D::DrawQuad(const Transform& transform, const glm::vec4& color)
-{
-	m_shader->SetUniformVec4("u_Color", color);
-
-	m_shader->SetUniformMat4("u_Tranform", transform.GetTransform());
-
-	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-}
 
 void Renderer2D::Clear(const glm::vec4& clearColor)
 {

@@ -35,12 +35,13 @@ Texture::Texture(const char* filePath)
 	stbi_image_free(data);
 }
 
-void Texture::Bind(unsigned int slot) const
+void Texture::Bind(unsigned int slot) const 
 {
+	m_slot = slot;
 	if (!m_bound)
 	{
 		m_bound = true;
-		glBindTextureUnit(slot, m_Id);
+		glBindTextureUnit(m_slot, m_Id);
 	}
 }
 

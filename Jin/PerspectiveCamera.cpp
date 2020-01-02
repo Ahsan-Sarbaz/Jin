@@ -4,7 +4,7 @@
 #include <glm\ext\matrix_clip_space.hpp>
 #include "Time.h"
 
-PerspectiveCamera::PerspectiveCamera(int width, int height, int near, int far, int fov)
+PerspectiveCamera::PerspectiveCamera(int width, int height, float near, int far, int fov)
 	:Camera(width, height, near, far, fov)
 {
 	m_type = Perspective;
