@@ -3,6 +3,30 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+Texture::Texture(unsigned int width, unsigned int height, unsigned char color)
+{
+	unsigned char* data = (unsigned char*)malloc(width * height * sizeof(unsigned char));
+
+	for (int i = 0; i < (width * height * sizeof(unsigned char)); ++i)
+	{
+		data[i] = color;
+	}
+
+	GLenum internalFormat = GL_RGB8, dataFormat = GL_RGB;
+	
+
+	glCreateTextures(GL_TEXTURE_2D, 1, &m_Id);
+	glTextureStorage2D(m_Id, 1, internalFormat, width, height);
+
+	glTextureParameteri(m_Id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(m_Id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTextureParameteri(m_Id, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(m_Id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTextureSubImage2D(m_Id, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
+}
+
 Texture::Texture(const char* filePath)
 {
 	int width, height, channels;

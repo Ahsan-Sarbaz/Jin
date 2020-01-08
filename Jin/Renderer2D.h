@@ -14,6 +14,7 @@ class Renderer2D :
 	unsigned int ibo;
 	Shader* m_shader;
 	glm::vec4 m_clearColor;
+	Texture* m_whiteTexture;
 
 public:
 	Renderer2D();

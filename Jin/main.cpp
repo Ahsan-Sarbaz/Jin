@@ -4,7 +4,7 @@
 #include <glm\gtc\type_ptr.hpp>
 #include "Input.h"
 #include "PerspectiveCamera.h"
-
+#include "Light.h"
 
 int main()
 {
@@ -35,20 +35,25 @@ int main()
 	Scene scene;
 
 	OrthographicCamera cam(1920, 1080);
-	PerspectiveCamera perspectiveCam(1920, 1080, 0.1f, 100, 90);
+	PerspectiveCamera perspectiveCam(1920, 1080, 0.1f, 1000, 90);
 
 	scene.SetCamera(&cam);
 	bool perspective = false;
 
 	Material mat;
 	mat.SetDiffuse(color);
-	mat.SetTexture(t);
+	//mat.SetTexture(t);
 
+	Light light;
+	light.SetLightColor({1,0,1});
+	
+	scene.AddLight(&light);
 	
 	while (app.IsOpen())
 	{
 		app.PollEvents();
 		app.Tick();
+		light.SetLightPosition({Input::GetMouseX(),Input::GetMouseY(),1});
 
 		renderer.Clear(clearColor);
 		

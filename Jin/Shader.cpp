@@ -76,7 +76,14 @@ int Shader::CompileShader(const char* source, ShaderType type)
 	if (!success)
 	{
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::COMPILATION\n" << infoLog << std::endl;
+		if (type == ShaderType::Vertex)
+		{
+			std::cout << "ERROR::VERTEX_SHADER::PROGRAM::COMPILATION\n" << infoLog << std::endl;
+		}
+		else if (type == ShaderType::Fragment)
+		{
+			std::cout << "ERROR::FRAGMENT_SHADER::PROGRAM::COMPILATION\n" << infoLog << std::endl;
+		}
 	}
 
 	return shader;

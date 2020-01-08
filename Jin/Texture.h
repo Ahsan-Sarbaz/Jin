@@ -14,6 +14,7 @@ public:
 		m_Id = 0;
 	}
 
+	Texture(unsigned int width, unsigned int height, unsigned char color);
 	Texture(const char* filePath);
 
 
