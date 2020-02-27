@@ -20,6 +20,8 @@ public:
 	Renderer2D();
 	virtual void Init(RendererConfig& config) override;
 
+	Shader* GetShader() { return m_shader; }
+
 	void BeginScene(Scene& s);
 	void EndScene();
 	void DrawQuad(const glm::vec3& position, const glm::vec3& size, const Material& material);

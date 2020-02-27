@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 
-enum ShaderType
+enum class ShaderType
 {
 	Vertex = GL_VERTEX_SHADER,
 	Fragment = GL_FRAGMENT_SHADER,

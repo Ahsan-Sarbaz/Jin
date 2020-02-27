@@ -51,8 +51,11 @@ void Renderer2D::BeginScene(Scene& scene)
 {
 	m_shader->Bind();	
 	m_shader->SetUniformMat4("u_ViewProjection", scene.GetCamera()->GetViewProjectionMatrix());
-	m_shader->SetUniformVec3("light.LightPos", scene.GetLights().front()->GetLightPosition());
-	m_shader->SetUniformVec3("light.LightColor", scene.GetLights().front()->GetLightColor());
+	if (scene.HasLights())
+	{
+		m_shader->SetUniformVec3("light.Pos", scene.GetLights().front()->GetLightPosition());
+		m_shader->SetUniformVec3("light.Color", scene.GetLights().front()->GetLightColor());
+	}
 }
 
 void Renderer2D::EndScene()
@@ -62,22 +65,15 @@ void Renderer2D::EndScene()
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const Material& material)
 {
-	//m_shader->SetUniformVec3("u_LightPosition", {Input::GetMouseX(), Input::GetMouseY(), 1});
 	m_shader->SetUniformVec4("mat.Diffuse", material.GetDiffuse());
 
 	glm::mat4 transformation = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
 	m_shader->SetUniformMat4("u_Transform", transformation);
+	m_shader->SetUniformInt("mat.Texture", material.GetTexture().GetSlot());
 	if (material.HasTexture())
-	{
-		m_shader->SetUniformInt("mat.Texture", material.GetTexture().GetSlot());
 		material.GetTexture().Bind();
-	}
 	else
-	{
-		m_shader->SetUniformInt("mat.Texture", material.GetTexture().GetSlot());
 		m_whiteTexture->Bind();
-
-	}
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -88,17 +84,11 @@ void Renderer2D::DrawQuad(const Transform& transform, const Material& material)
 
 	m_shader->SetUniformMat4("u_Transform", transform.GetTransform());
 	
+	m_shader->SetUniformInt("mat.Texture", material.GetTexture().GetSlot());
 	if (material.HasTexture())
-	{
-		m_shader->SetUniformInt("mat.Texture", material.GetTexture().GetSlot());
 		material.GetTexture().Bind();
-	}
 	else
-	{
-		m_shader->SetUniformInt("mat.Texture", material.GetTexture().GetSlot());
 		m_whiteTexture->Bind();
-
-	}
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

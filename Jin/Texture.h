@@ -6,7 +6,7 @@ class Texture
 private:
 	unsigned int m_Id;
 	mutable bool m_bound =  false;
-	mutable unsigned int m_slot;
+	mutable unsigned int m_slot = 0;
 
 public:
 	Texture()

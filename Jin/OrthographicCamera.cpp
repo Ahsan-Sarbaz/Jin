@@ -51,6 +51,7 @@ void OrthographicCamera::Tick()
 	{
 		m_rotation -= m_rotationSpeed * dt;
 	}
+
 	
 	if (m_rotation > 180.0f)
 		m_rotation -= 360.0f;
@@ -60,7 +61,6 @@ void OrthographicCamera::Tick()
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_position) *
 		glm::rotate(glm::mat4(1.0f	), glm::radians(m_rotation), glm::vec3(0, 0, 1));
 	m_viewMatrix = glm::inverse(transform);
-
 
 	m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
 }

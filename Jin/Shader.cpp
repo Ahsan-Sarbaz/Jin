@@ -64,7 +64,24 @@ const std::string Shader::ReadShaderFile(const char* path)
 
 int Shader::CompileShader(const char* source, ShaderType type)
 {
-	int shader = glCreateShader(type);
+	GLenum shaderType = 0;
+
+	switch (type)
+	{
+	case ShaderType::Vertex:
+		shaderType = GL_VERTEX_SHADER;
+		break;
+	case ShaderType::Fragment:
+		shaderType = GL_FRAGMENT_SHADER;
+		break;
+	case ShaderType::Geometry:
+		shaderType = GL_GEOMETRY_SHADER;
+		break;
+	default:
+		break;
+	}
+
+	int shader = glCreateShader(shaderType);
 	
 	glShaderSource(shader, 1, &source,  0);
 	

@@ -52,7 +52,6 @@ void PerspectiveCamera::Tick()
 		m_rotation -= m_rotationSpeed * dt;
 	}
 
-
 	if (m_rotation > 180.0f)
 		m_rotation -= 360.0f;
 	else if (m_rotation <= -180.0f)

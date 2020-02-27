@@ -9,28 +9,28 @@ struct Material
 
 struct Light
 {
-	vec3 LightPos;
-	vec3 LightColor;
+	vec3 Pos;
+	vec3 Color;
 };
 
 uniform Light light;
 uniform Material mat;
 
-in vec2 o_texCoord;
-in vec3 o_FragPos;
-in mat4 o_ViewProjection;
+in vec2 v_texCoord;
+in vec3 v_FragPos;
+in mat4 v_ViewProjection;
+
+uniform vec3  u_intensity;        // intensity value to apply to the light
+uniform float u_attenuation_c;    // constant attenuation
+uniform float u_attenuation_l;    // linear attenuation
+uniform float u_attenuation_q;    // quadratic attenuation
 
 void main()
 {
+	vec4 lightPos = v_ViewProjection * vec4(light.Pos, 1);
+	float d = distance(lightPos.xyz, v_FragPos);
 
-	vec3 LightPos = vec3(o_ViewProjection * vec4(light.LightPos, 1));
+	vec3 frag_intensity = u_intensity / (u_attenuation_c + u_attenuation_l*d + u_attenuation_q*pow(d,2));
 
-	vec3 normal = vec3(0,0, 1);
-	vec3 lightDir = normalize(LightPos - o_FragPos);
-	float diff = max(dot(normal, lightDir), 0.0);
-	vec4 DiffuseColor = diff * vec4(light.LightColor, 1);
-
-	vec4 resultColor = mat.Diffuse * DiffuseColor;
-	//FinalColor= vec4(lightDir, 1);
-	FinalColor = texture(mat.Texture, o_texCoord) * resultColor;
+	FinalColor = vec4(frag_intensity * light.Color, 1) * texture(mat.Texture, v_texCoord);
 }
