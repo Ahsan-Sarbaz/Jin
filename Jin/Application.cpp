@@ -1,7 +1,6 @@
 #include "Application.h"
 #include <glm/glm.hpp>
 #include <glm\ext\matrix_clip_space.hpp>
-#include "Renderer.h"
 #include "Time.h"
 
 Application* Application::m_instance = nullptr;
@@ -13,7 +12,6 @@ Application::Application()
 
 Application::~Application()
 {
-	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
@@ -59,57 +57,66 @@ bool Application::Init(const ApplicationConfiguration& config)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
+	
+	glfwSwapInterval(m_appConfig.vsync ? 1 : 0);
 
 	return true;
 }
 
 bool Application::Run()
 {
-	glfwSwapInterval(m_appConfig.vsync ? 1 : 0);
+	for (auto layer : m_layers)
+	{
+		layer.second->Start();
+	}
+
+	while (!glfwWindowShouldClose(m_window.GetHandle()))
+	{
+		glfwPollEvents();
+
+		float time = (float)glfwGetTime();
+		float dt = time - m_lastFrameTime;
+		m_lastFrameTime = time;
+		Time::Get()->SetDeltaTime(dt);
+
+
+		m_isOpen = !glfwWindowShouldClose(m_window.GetHandle());
+		m_window.Tick();
+
+		m_appConfig.width = m_window.GetWindowConfig().width;
+		m_appConfig.height = m_window.GetWindowConfig().height;
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		for (auto layer : m_layers)
+		{
+			layer.second->Update();
+		}
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		glfwSwapBuffers(m_window.GetHandle());
+	}
+
+	for (auto layer : m_layers)
+	{
+		layer.second->End();
+	}
+
 	return true;
 }
 
-bool Application::IsOpen()
+void Application::AddLayer(Layer* layer)
 {
-	return m_isOpen;
+	m_layers.insert(std::pair<const char*, Layer*>(layer->GetName(), layer));
 }
 
-
-void Application::Tick()
+void Application::RemoveLayer(Layer* layer)
 {
-	float time = (float)glfwGetTime();
-	float dt = time - m_lastFrameTime;
-	m_lastFrameTime = time;
-	Time::Get()->SetDeltaTime(dt);
-	
-
-	m_isOpen = !glfwWindowShouldClose(m_window.GetHandle());
-	m_window.Tick();
-
-	m_appConfig.width = m_window.GetWindowConfig().width;
-	m_appConfig.height = m_window.GetWindowConfig().height;
-
-	// Start the Dear ImGui frame
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-}
-
-
-void Application::SwapBuffers()
-{
-	// Rendering
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-	glfwSwapBuffers(m_window.GetHandle());
-}
-
-
-void Application::PollEvents()
-{
-	glfwPollEvents();
+	m_layers.erase(layer->GetName());
 }
 
 bool Application::InitGLEW()

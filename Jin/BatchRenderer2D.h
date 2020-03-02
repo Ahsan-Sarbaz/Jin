@@ -12,39 +12,43 @@ struct Vertex
 	unsigned int texture;
 };
 
+struct RendererState
+{
+	bool Initiated = false;
+	unsigned int VAO;
+	unsigned int VBO;
+	unsigned int IBO;
+	Vertex* Buffer;
+	Vertex* BufferPtr = nullptr;
+	unsigned int IndexCount = 0;
+	unsigned int QuadCount = 0;
+	unsigned int DrawCount = 0;
+	int MaxTextureUnits = 0;
+	int TextureUnit = 1;
+	Texture WhiteTexture;
+	std::unordered_map<int, int> TextureUnitCache;
+	Shader* CurrentShader;
+};
+
 class BatchRenderer2D
 {
-private:
-	unsigned int m_vao;
-	unsigned int m_vbo;
-	unsigned int m_ibo;
-	Vertex* m_memory;
-	Vertex* m_memoryPtr = nullptr;
-	unsigned int m_indexCount = 0;
-	unsigned int m_QuadCount = 0;
-	unsigned int m_DrawCount = 0;
-	int m_MaxtextureSlot = 0;
-	int m_textureSlot = 1;
-	Texture m_whiteTexture;
-	std::unordered_map<int, int> m_textureIDSlotCache;
-	Shader* m_shader;
-
 public:
-	BatchRenderer2D();
-	~BatchRenderer2D();
+	
+	static void Init();
+	static void Shutdown();
 
-	void Begin();
-	void End();
-	void Flush();
+	static void Begin();
+	static void End();
+	static void Flush();
 
-	void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color);
-	void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Texture& texture);
+	static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color);
+	static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Texture& texture);
 
-	const unsigned int GetDrawCount() const { return m_DrawCount; }
-	const unsigned int GetQuadCount() const { return m_QuadCount; }
+	static const unsigned int GetDrawCount();
+	static const unsigned int GetQuadCount();
 
-	Shader* GetShader() { return m_shader; }
-	void SetShader(Shader* shader) { m_shader = shader; }
+	static Shader* GetShader();
+	static void SetShader(Shader* shader);
 
-	void ResetStates();
+	static void ResetStates();
 };
