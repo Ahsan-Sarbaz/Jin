@@ -33,6 +33,11 @@ Texture::Texture(const char* filePath)
 	stbi_set_flip_vertically_on_load(1);
 	stbi_uc* data = stbi_load(filePath, &width, &height, &channels, 0);
 	
+	if (!data)
+	{
+		printf("Failed to open file : %s\n", filePath);
+	}
+
 	GLenum internalFormat = 0, dataFormat = 0;
 	if (channels == 4)
 	{
@@ -61,11 +66,10 @@ Texture::Texture(const char* filePath)
 
 void Texture::Bind(unsigned int slot) const 
 {
-	m_slot = slot;
 	if (!m_bound)
 	{
 		m_bound = true;
-		glBindTextureUnit(m_slot, m_Id);
+		glBindTextureUnit(slot, m_Id);
 	}
 }
 

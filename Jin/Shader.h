@@ -23,6 +23,8 @@ public:
 	void Bind();
 	void Unbind();
 
+	int GetID() { return m_ID; }
+
 	int GetUniformLocation(const char* name);
 
 	void SetUniformInt(const char* name, int val);
