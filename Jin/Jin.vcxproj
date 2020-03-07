@@ -81,6 +81,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui_impl_opengl3.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="imgui_impl_glfw.h" />
     <ClInclude Include="imgui_impl_opengl3.h" />

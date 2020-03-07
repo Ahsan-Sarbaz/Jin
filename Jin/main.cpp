@@ -5,6 +5,7 @@
 #include "PerspectiveCamera.h"
 #include "Light.h"
 #include "BatchRenderer2D.h"
+#include "Logger.h"
 
 class MainLayer : public Layer
 {
@@ -87,10 +88,17 @@ int main()
 	config.height = 1080;
 	config.title = "Window";
 	config.vsync = 0;
-	
-	if (!app.Init(config)) return 1;
 
+	if (!app.Init(config))
+	{
+		JIN_FATAL("Application Failed to Initialize");
+		return EXIT_FAILURE;
+	}
 	app.AddLayer(new MainLayer);
 
-	if (!app.Run()) return 2;
+	if (!app.Run())
+	{
+		JIN_FATAL("Application Failed to Run");
+		return EXIT_FAILURE;
+	}
 }
