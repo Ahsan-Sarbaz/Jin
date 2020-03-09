@@ -3,6 +3,8 @@
 #include <glm\ext\matrix_clip_space.hpp>
 #include "Time.h"
 
+#define JIN_IMGUI 1
+
 Application* Application::m_instance = nullptr;
 
 Application::Application()
@@ -12,9 +14,11 @@ Application::Application()
 
 Application::~Application()
 {
+#if JIN_IMGUI
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+#endif // JIN_NO_IMGUI
 }
 
 static void window_size_callback(GLFWwindow* window, int width, int height)
@@ -41,6 +45,7 @@ bool Application::Init(const ApplicationConfiguration& config)
 
 	glfwSetWindowSizeCallback(m_window.GetHandle(), window_size_callback);
 
+#if JIN_IMGUI
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -53,6 +58,7 @@ bool Application::Init(const ApplicationConfiguration& config)
 
 	ImGui_ImplGlfw_InitForOpenGL(m_window.GetHandle(), true);
 	ImGui_ImplOpenGL3_Init("#version 130");
+#endif // JIN_NO_IMGUI
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -85,18 +91,21 @@ bool Application::Run()
 
 		m_appConfig.width = m_window.GetWindowConfig().width;
 		m_appConfig.height = m_window.GetWindowConfig().height;
-
+#if JIN_IMGUI
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+#endif // JIN_NO_IMGUI
 
 		for (auto layer : m_layers)
 		{
 			layer.second->Update();
 		}
 
+#if JIN_IMGUI
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif // JIN_NO_IMGUI
 
 		glfwSwapBuffers(m_window.GetHandle());
 	}

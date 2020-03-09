@@ -1,13 +1,6 @@
 #include "Application.h"
 #include "Input.h"
 
-Input* Input::m_instance = nullptr;
-
-Input::Input()
-{
-	m_instance = this;
-}
-
 float Input::GetMouseX()
 {
 	auto window = Application::Get()->GetWindow().GetHandle();

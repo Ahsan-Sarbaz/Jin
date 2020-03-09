@@ -1,6 +1,6 @@
 #include "Layer.h"
 
-Layer::Layer(const char* name)
+Layer::Layer(cstr name)
 	:m_name(name)
 {
 }

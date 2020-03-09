@@ -10,7 +10,7 @@
 class MainLayer : public Layer
 {
 private:
-	glm::vec4 clearColor = { 0.8f,0.8f,0.8f,1 };
+	Vec4 clearColor = { 0.8f,0.8f,0.8f,1 };
 	bool show_properties = true;
 	OrthographicCamera cam = OrthographicCamera(1920, 1080);
 	
@@ -24,6 +24,7 @@ public:
 	virtual void Start() override
 	{
 		BatchRenderer2D::Init();
+		BatchRenderer2D::SetCamera(&cam);
 	}
 
 	virtual void Update() override
@@ -39,7 +40,7 @@ public:
 
 			ImGui::Text("Framerate : %f", ImGui::GetIO().Framerate);
 
-			ImGui::ColorEdit4("Clear Color", glm::value_ptr(clearColor));
+			ImGui::ColorEdit4("Clear Color", clearColor.data);
 
 			ImGui::Text("Draw Calls %d", BatchRenderer2D::GetDrawCount());
 			ImGui::Text("Quad Count %d", BatchRenderer2D::GetQuadCount());
@@ -52,23 +53,24 @@ public:
 
 		BatchRenderer2D::Begin();
 
+		
+
 		float size = 5;
 		float gutter = size / 2;
 		float finalSize = size + gutter;
 
-		for (float y = 0; y < 1000; y++)
+		for (float y = 0; y < 1; y++)
 		{
-			for (float x = 0; x < 50; x++)
+			for (float x = 0; x < 270000; x++)
 			{
 				float r = 5;
 				BatchRenderer2D::DrawQuad({ x + size * x + r, y + size * y + r }, { finalSize, finalSize }, { 1,0,1,1 });
+				
+				
 			}
 		}
 
 		BatchRenderer2D::End();
-
-		BatchRenderer2D::GetShader()->Bind();
-		BatchRenderer2D::GetShader()->SetUniformMat4("u_ViewProjection", cam.GetViewProjectionMatrix());
 
 		BatchRenderer2D::Flush();
 	}

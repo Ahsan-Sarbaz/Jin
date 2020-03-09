@@ -4,10 +4,10 @@
 #include <glm\ext\matrix_clip_space.hpp>
 #include "Time.h"
 
-OrthographicCamera::OrthographicCamera(int width, int height)
+OrthographicCamera::OrthographicCamera(f32 width, f32 height)
 	:Camera(width, height, -1.0f, 1.0f, 0)
 {
-	m_type = Orthographic;
+	m_type = CameraType::Orthographic;
 	m_projectionMatrix = glm::orthoLH(0.0f, m_width, m_height, 0.0f, m_near, m_far);
 	m_position = glm::vec3(0.0f);
 	m_rotation = 0;
@@ -18,36 +18,36 @@ OrthographicCamera::OrthographicCamera(int width, int height)
 void OrthographicCamera::Tick()
 {
 	float dt = Time::GetDeltaTime();
-	if (Input::IsKeyPressed(JinKey::LEFT) || Input::IsKeyPressed(JinKey::A))
+	if (Input::IsKeyPressed(JinKey::KEY_LEFT) || Input::IsKeyPressed(JinKey::KEY_A))
 	{
 		m_position.x -= cos(glm::radians(m_rotation)) * m_translationSpeed * dt;
 		m_position.y -= sin(glm::radians(m_rotation)) * m_translationSpeed * dt;
 	}
 
-	if (Input::IsKeyPressed(JinKey::RIGHT) || Input::IsKeyPressed(JinKey::D))
+	if (Input::IsKeyPressed(JinKey::KEY_RIGHT) || Input::IsKeyPressed(JinKey::KEY_D))
 	{
 		m_position.x+= cos(glm::radians(m_rotation)) * m_translationSpeed * dt;
 		m_position.y+= sin(glm::radians(m_rotation)) * m_translationSpeed * dt;
 	}
 
-	if (Input::IsKeyPressed(JinKey::UP) || Input::IsKeyPressed(JinKey::W))
+	if (Input::IsKeyPressed(JinKey::KEY_UP) || Input::IsKeyPressed(JinKey::KEY_W))
 	{
 		m_position.x += -sin(glm::radians(m_rotation)) * m_translationSpeed * dt;
 		m_position.y += cos(glm::radians(m_rotation)) * m_translationSpeed * dt;
 	}
 
-	if (Input::IsKeyPressed(JinKey::DOWN) || Input::IsKeyPressed(JinKey::S))
+	if (Input::IsKeyPressed(JinKey::KEY_DOWN) || Input::IsKeyPressed(JinKey::KEY_S))
 	{
 		m_position.x -= -sin(glm::radians(m_rotation)) * m_translationSpeed * dt;
 		m_position.y -= cos(glm::radians(m_rotation)) * m_translationSpeed * dt;
 	}
 
-	if (Input::IsKeyPressed(JinKey::Q))
+	if (Input::IsKeyPressed(JinKey::KEY_Q))
 	{
 		m_rotation += m_rotationSpeed * dt;
 	}
 
-	if (Input::IsKeyPressed(JinKey::E))
+	if (Input::IsKeyPressed(JinKey::KEY_E))
 	{
 		m_rotation -= m_rotationSpeed * dt;
 	}

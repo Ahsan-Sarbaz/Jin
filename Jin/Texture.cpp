@@ -3,11 +3,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-Texture::Texture(unsigned int width, unsigned int height, unsigned char color)
+Texture::Texture(u32 width, u32 height, u8 color)
 {
-	unsigned char* data = (unsigned char*)malloc(width * height * sizeof(unsigned char));
+	u8* data = (u8*)malloc(width * height * sizeof(u8));
 
-	for (int i = 0; i < (width * height * sizeof(unsigned char)); ++i)
+	for (u32 i = 0; i < (width * height * sizeof(u8)); ++i)
 	{
 		data[i] = color;
 	}
@@ -27,9 +27,9 @@ Texture::Texture(unsigned int width, unsigned int height, unsigned char color)
 	glTextureSubImage2D(m_Id, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
 }
 
-Texture::Texture(const char* filePath)
+Texture::Texture(cstr filePath)
 {
-	int width, height, channels;
+	i32 width, height, channels;
 	stbi_set_flip_vertically_on_load(1);
 	stbi_uc* data = stbi_load(filePath, &width, &height, &channels, 0);
 	
@@ -64,7 +64,7 @@ Texture::Texture(const char* filePath)
 	stbi_image_free(data);
 }
 
-void Texture::Bind(unsigned int slot) const 
+void Texture::Bind(u32 slot) const 
 {
 	if (!m_bound)
 	{

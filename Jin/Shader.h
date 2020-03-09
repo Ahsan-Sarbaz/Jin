@@ -1,8 +1,10 @@
 #pragma once
+#include "Types.h"
 #include <GL/glew.h>
 #include <string>
 #include <unordered_map>
 #include <glm/glm.hpp>
+#include "Maths.h"
 
 enum class ShaderType
 {
@@ -14,32 +16,32 @@ enum class ShaderType
 class Shader
 {
 private:
-	int m_ID;
-	std::unordered_map<const char*, int> m_uniformCache;
+	i32 m_ID;
+	std::unordered_map<cstr, i32> m_uniformCache;
 	bool m_bound;
 public:
-	Shader(const char* vspath, const char* fspath);
+	Shader(cstr vspath, cstr fspath);
 
 	void Bind();
 	void Unbind();
 
-	int GetID() { return m_ID; }
+	i32 GetID() { return m_ID; }
 
-	int GetUniformLocation(const char* name);
+	i32 GetUniformLocation(const char* name);
 
-	void SetUniformInt(const char* name, int val);
-	void SetUniformFloat(const char* name, float x);
-	void SetUniformFloat(const char* name, float x, float y);
-	void SetUniformFloat(const char* name, float x, float y, float z);
-	void SetUniformFloat(const char* name, float x, float y, float z, float w);
-	void SetUniformVec2(const char* name, const glm::vec2& x);
-	void SetUniformVec3(const char* name, const glm::vec3& x);
-	void SetUniformVec4(const char* name, const glm::vec4& x);
-	void SetUniformMat2(const char* name, const glm::mat2& x);
-	void SetUniformMat3(const char* name, const glm::mat3& x);
-	void SetUniformMat4(const char* name, const glm::mat4& x);
+	void SetUniformInt(cstr name, int val);
+	void SetUniformFloat(cstr name, float x);
+	void SetUniformFloat(cstr name, float x, float y);
+	void SetUniformFloat(cstr name, float x, float y, float z);
+	void SetUniformFloat(cstr name, float x, float y, float z, float w);
+	void SetUniformVec2(cstr name, const Vec2& x);
+	void SetUniformVec3(cstr name, const Vec3& x);
+	void SetUniformVec4(cstr name, const Vec4& x);
+	void SetUniformMat2(cstr name, const glm::mat2& x);
+	void SetUniformMat3(cstr name, const glm::mat3& x);
+	void SetUniformMat4(cstr name, const glm::mat4& x);
 
 private:
-	inline const std::string ReadShaderFile(const char* path);
-	inline int CompileShader(const char* source, ShaderType Type);
+	const std::string ReadShaderFile(cstr path);
+	i32 CompileShader(cstr source, ShaderType Type);
 };

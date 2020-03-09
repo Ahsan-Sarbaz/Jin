@@ -4,7 +4,7 @@
 class PerspectiveCamera : public Camera
 {
 public:
-	PerspectiveCamera(int width, int height, float near, int far, int fov);
+	PerspectiveCamera(f32 width, f32 height, f32 near, f32 far, f32 fov);
 
 	virtual void Tick() override;
 };

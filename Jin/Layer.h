@@ -1,14 +1,16 @@
 #pragma once
+#include "Types.h"
+
 class Layer
 {
 private:
-	const char* m_name;
+	cstr m_name;
 public:
-	Layer(const char* name);
+	Layer(cstr name);
 	
 	virtual void Start() = 0;
 	virtual void Update() = 0;
 	virtual void End() = 0;
 
-	const char* GetName() const { return m_name; }
+	cstr GetName() const { return m_name; }
 };

@@ -102,13 +102,18 @@ void BatchRenderer2D::End()
 
 void BatchRenderer2D::Flush()
 {
+	if (state.QuadCount == 0)
+		return;
+	state.CurrentShader->Bind();
+	state.CurrentShader->SetUniformMat4("u_ViewProjection", state.CurrentCamera->GetViewProjectionMatrix());
+
 	glBindVertexArray(state.VAO);
 	glDrawElements(GL_TRIANGLES, state.IndexCount, GL_UNSIGNED_INT, nullptr);
 	state.IndexCount = 0;
 	state.DrawCount++;
 }
 
-void BatchRenderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
+void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Vec4& color)
 {
 	if (state.IndexCount >= MAX_IND_COUNT)
 	{
@@ -120,7 +125,7 @@ void BatchRenderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, cons
 	state.WhiteTexture.Bind();
 
 	state.BufferPtr->position = { pos.x, pos.y, 0.0f };
-	state.BufferPtr->color= color;
+	state.BufferPtr->color = color;
 	state.BufferPtr->texCoord = { 0.0f, 0.0f };
 	state.BufferPtr->texture = 0.0f;
 	state.BufferPtr++;
@@ -148,7 +153,7 @@ void BatchRenderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, cons
 	state.QuadCount++;
 }
 
-void BatchRenderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Texture& texture)
+void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture& texture)
 {
 	if (state.IndexCount >= MAX_IND_COUNT || state.TextureUnit >= state.MaxTextureUnits)
 	{
@@ -158,7 +163,7 @@ void BatchRenderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, cons
 		state.TextureUnit = 0;
 	}
 
-	glm::vec4 color = {1,1,1,1};
+	Vec4 color = {1,1,1,1};
 	int textureSlot = 0;
 	if (state.TextureUnitCache.find(texture.GetID()) == state.TextureUnitCache.end())
 	{
@@ -222,6 +227,16 @@ Shader* BatchRenderer2D::GetShader()
 void BatchRenderer2D::SetShader(Shader* shader)
 {
 	state.CurrentShader = shader;
+}
+
+void BatchRenderer2D::SetCamera(Camera* camera)
+{
+	state.CurrentCamera = camera;
+}
+
+Camera* BatchRenderer2D::GetCamera()
+{
+	return state.CurrentCamera;
 }
 
 void BatchRenderer2D::ResetStates()
