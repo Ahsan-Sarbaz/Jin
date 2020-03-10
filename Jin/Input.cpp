@@ -1,20 +1,20 @@
 #include "Application.h"
 #include "Input.h"
 
-float Input::GetMouseX()
+f32 Input::GetMouseX()
 {
 	auto window = Application::Get()->GetWindow().GetHandle();
 	double xpos, ypos;
 	glfwGetCursorPos(window, &xpos, &ypos);
-	return (float)xpos;
+	return (f32)xpos;
 }
 
-float Input::GetMouseY()
+f32 Input::GetMouseY()
 {
 	auto window = Application::Get()->GetWindow().GetHandle();
 	double xpos, ypos;
 	glfwGetCursorPos(window, &xpos, &ypos);
-	return (float)ypos;
+	return (f32)ypos;
 }
 
 bool Input::IsKeyPressed(JinKey key)

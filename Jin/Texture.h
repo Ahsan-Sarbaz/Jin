@@ -16,7 +16,7 @@ public:
 	}
 
 	Texture(u32 width, u32 height, u8 color);
-	Texture(cstr filePath);
+	Texture(cstr filePath, bool flip = 1);
 
 	void Bind(u32 slot = 0) const;
 	void Unbind();

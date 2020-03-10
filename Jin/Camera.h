@@ -23,7 +23,7 @@ protected:
 	f32 m_width, m_height, m_far, m_near, m_fov;
 
 public:
-	Camera(float w, float h, float n, float f, float fov)
+	Camera(f32 w, f32 h, f32 n, f32 f, f32 fov)
 	{
 		m_width = w;
 		m_height = h;

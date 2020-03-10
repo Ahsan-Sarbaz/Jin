@@ -13,8 +13,8 @@ Shader::Shader(cstr vspath, cstr fspath)
 	auto vsSource = vsString.c_str();
 	auto fsSource = fsString.c_str();
 
-	int vsId = CompileShader(vsSource, ShaderType::Vertex);
-	int fsId = CompileShader(fsSource, ShaderType::Fragment);
+	i32 vsId = CompileShader(vsSource, ShaderType::Vertex);
+	i32 fsId = CompileShader(fsSource, ShaderType::Fragment);
 
 	m_ID = glCreateProgram();
 	glAttachShader(m_ID, vsId);
@@ -22,8 +22,8 @@ Shader::Shader(cstr vspath, cstr fspath)
 	
 	glLinkProgram(m_ID);
 
-	int success;
-	char infoLog[512];
+	i32 success;
+	i8 infoLog[512];
 	glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
 	if (!success)
 	{
@@ -62,7 +62,7 @@ const std::string Shader::ReadShaderFile(cstr path)
 	return temp;
 }
 
-int Shader::CompileShader(cstr source, ShaderType type)
+i32 Shader::CompileShader(cstr source, ShaderType type)
 {
 	GLenum shaderType = 0;
 
@@ -81,13 +81,13 @@ int Shader::CompileShader(cstr source, ShaderType type)
 		break;
 	}
 
-	int shader = glCreateShader(shaderType);
+	i32 shader = glCreateShader(shaderType);
 	
 	glShaderSource(shader, 1, &source,  0);
 	
 	glCompileShader(shader);
 
-	int success;
+	i32 success;
 	char infoLog[512];
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success)
@@ -106,7 +106,7 @@ int Shader::CompileShader(cstr source, ShaderType type)
 	return shader;
 }
 
-int Shader::GetUniformLocation(cstr name)
+i32 Shader::GetUniformLocation(cstr name)
 {
 	if (m_uniformCache.find(name) != m_uniformCache.end())
 	{
@@ -116,27 +116,27 @@ int Shader::GetUniformLocation(cstr name)
 	return m_uniformCache[name];
 }
 
-void Shader::SetUniformInt(cstr name, int val)
+void Shader::SetUniformInt(cstr name, i32 val)
 {
 	glUniform1i(GetUniformLocation(name), val);
 }
 
-void Shader::SetUniformFloat(cstr name, float x)
+void Shader::SetUniformFloat(cstr name, f32 x)
 {
 	glUniform1f(GetUniformLocation(name), x);
 }
 
-void Shader::SetUniformFloat(cstr name, float x, float y)
+void Shader::SetUniformFloat(cstr name, f32 x, f32 y)
 {
 	glUniform2f(GetUniformLocation(name), x, y);
 }
 
-void Shader::SetUniformFloat(cstr name, float x, float y, float z)
+void Shader::SetUniformFloat(cstr name, f32 x, f32 y, f32 z)
 {
 	glUniform3f(GetUniformLocation(name), x, y, z);
 }
   
-void Shader::SetUniformFloat(cstr name, float x, float y, float z, float w)
+void Shader::SetUniformFloat(cstr name, f32 x, f32 y, f32 z, f32 w)
 {
 	glUniform4f(GetUniformLocation(name), x, y, z, w);
 }

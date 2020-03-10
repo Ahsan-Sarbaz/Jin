@@ -21,7 +21,7 @@ Application::~Application()
 #endif // JIN_NO_IMGUI
 }
 
-static void window_size_callback(GLFWwindow* window, int width, int height)
+static void window_size_callback(GLFWwindow* window, i32 width, i32 height)
 {
 	glViewport(0, 0, width, height);
 }
@@ -80,8 +80,8 @@ bool Application::Run()
 	{
 		glfwPollEvents();
 
-		float time = (float)glfwGetTime();
-		float dt = time - m_lastFrameTime;
+		f32 time = (f32)glfwGetTime();
+		f32 dt = time - m_lastFrameTime;
 		m_lastFrameTime = time;
 		Time::Get()->SetDeltaTime(dt);
 
@@ -120,7 +120,7 @@ bool Application::Run()
 
 void Application::AddLayer(Layer* layer)
 {
-	m_layers.insert(std::pair<const char*, Layer*>(layer->GetName(), layer));
+	m_layers.insert(std::pair<cstr, Layer*>(layer->GetName(), layer));
 }
 
 void Application::RemoveLayer(Layer* layer)

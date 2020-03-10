@@ -71,17 +71,17 @@ static GLFWscrollfun        g_PrevUserCallbackScroll = NULL;
 static GLFWkeyfun           g_PrevUserCallbackKey = NULL;
 static GLFWcharfun          g_PrevUserCallbackChar = NULL;
 
-static const char* ImGui_ImplGlfw_GetClipboardText(void* user_data)
+static cstr ImGui_ImplGlfw_GetClipboardText(void* user_data)
 {
 	return glfwGetClipboardString((GLFWwindow*)user_data);
 }
 
-static void ImGui_ImplGlfw_SetClipboardText(void* user_data, const char* text)
+static void ImGui_ImplGlfw_SetClipboardText(void* user_data, cstr text)
 {
 	glfwSetClipboardString((GLFWwindow*)user_data, text);
 }
 
-void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, i32 button, i32 action, i32 mods)
 {
 	if (g_PrevUserCallbackMousebutton != NULL)
 		g_PrevUserCallbackMousebutton(window, button, action, mods);
@@ -96,11 +96,11 @@ void ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yo
 		g_PrevUserCallbackScroll(window, xoffset, yoffset);
 
 	ImGuiIO& io = ImGui::GetIO();
-	io.MouseWheelH += (float)xoffset;
-	io.MouseWheel += (float)yoffset;
+	io.MouseWheelH += (f32)xoffset;
+	io.MouseWheel += (f32)yoffset;
 }
 
-void ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods)
 {
 	if (g_PrevUserCallbackKey != NULL)
 		g_PrevUserCallbackKey(window, key, scancode, action, mods);
@@ -118,7 +118,7 @@ void ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int a
 	io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
 }
 
-void ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c)
+void ImGui_ImplGlfw_CharCallback(GLFWwindow* window, u32 c)
 {
 	if (g_PrevUserCallbackChar != NULL)
 		g_PrevUserCallbackChar(window, c);
@@ -229,7 +229,7 @@ static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
 {
 	// Update buttons
 	ImGuiIO& io = ImGui::GetIO();
-	for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+	for (i32 i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
 	{
 		// If a mouse press event came, always pass it as "mouse held this frame", so we don't miss click-release events that are shorter than 1 frame.
 		io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
@@ -254,7 +254,7 @@ static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
 		{
 			double mouse_x, mouse_y;
 			glfwGetCursorPos(g_Window, &mouse_x, &mouse_y);
-			io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);
+			io.MousePos = ImVec2((f32)mouse_x, (f32)mouse_y);
 		}
 	}
 }
@@ -289,9 +289,9 @@ static void ImGui_ImplGlfw_UpdateGamepads()
 
 	// Update gamepad inputs
 #define MAP_BUTTON(NAV_NO, BUTTON_NO)       { if (buttons_count > BUTTON_NO && buttons[BUTTON_NO] == GLFW_PRESS) io.NavInputs[NAV_NO] = 1.0f; }
-#define MAP_ANALOG(NAV_NO, AXIS_NO, V0, V1) { float v = (axes_count > AXIS_NO) ? axes[AXIS_NO] : V0; v = (v - V0) / (V1 - V0); if (v > 1.0f) v = 1.0f; if (io.NavInputs[NAV_NO] < v) io.NavInputs[NAV_NO] = v; }
-	int axes_count = 0, buttons_count = 0;
-	const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axes_count);
+#define MAP_ANALOG(NAV_NO, AXIS_NO, V0, V1) { f32 v = (axes_count > AXIS_NO) ? axes[AXIS_NO] : V0; v = (v - V0) / (V1 - V0); if (v > 1.0f) v = 1.0f; if (io.NavInputs[NAV_NO] < v) io.NavInputs[NAV_NO] = v; }
+	i32 axes_count = 0, buttons_count = 0;
+	const f32* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axes_count);
 	const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttons_count);
 	MAP_BUTTON(ImGuiNavInput_Activate, 0);     // Cross / A
 	MAP_BUTTON(ImGuiNavInput_Cancel, 1);     // Circle / B
@@ -323,17 +323,17 @@ void ImGui_ImplGlfw_NewFrame()
 	IM_ASSERT(io.Fonts->IsBuilt() && "Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().");
 
 	// Setup display size (every frame to accommodate for window resizing)
-	int w, h;
-	int display_w, display_h;
+	i32 w, h;
+	i32 display_w, display_h;
 	glfwGetWindowSize(g_Window, &w, &h);
 	glfwGetFramebufferSize(g_Window, &display_w, &display_h);
-	io.DisplaySize = ImVec2((float)w, (float)h);
+	io.DisplaySize = ImVec2((f32)w, (f32)h);
 	if (w > 0 && h > 0)
-		io.DisplayFramebufferScale = ImVec2((float)display_w / w, (float)display_h / h);
+		io.DisplayFramebufferScale = ImVec2((f32)display_w / w, (f32)display_h / h);
 
 	// Setup time step
 	double current_time = glfwGetTime();
-	io.DeltaTime = g_Time > 0.0 ? (float)(current_time - g_Time) : (float)(1.0f / 60.0f);
+	io.DeltaTime = g_Time > 0.0 ? (f32)(current_time - g_Time) : (f32)(1.0f / 60.0f);
 	g_Time = current_time;
 
 	ImGui_ImplGlfw_UpdateMousePosAndButtons();

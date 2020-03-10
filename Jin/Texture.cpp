@@ -27,10 +27,10 @@ Texture::Texture(u32 width, u32 height, u8 color)
 	glTextureSubImage2D(m_Id, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
 }
 
-Texture::Texture(cstr filePath)
+Texture::Texture(cstr filePath, bool flip)
 {
 	i32 width, height, channels;
-	stbi_set_flip_vertically_on_load(1);
+	stbi_set_flip_vertically_on_load(flip);
 	stbi_uc* data = stbi_load(filePath, &width, &height, &channels, 0);
 	
 	if (!data)

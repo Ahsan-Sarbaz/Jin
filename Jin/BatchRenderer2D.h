@@ -1,4 +1,5 @@
 #pragma once
+#include "Types.h"
 #include "Texture.h"
 #include <unordered_map>
 #include "Shader.h"
@@ -10,24 +11,24 @@ struct Vertex
 	Vec3 position;
 	Vec4 color;
 	Vec2 texCoord;
-	unsigned int texture;
+	u32 texture;
 };
 
 struct RendererState
 {
 	bool Initiated = false;
-	unsigned int VAO;
-	unsigned int VBO;
-	unsigned int IBO;
+	u32 VAO;
+	u32 VBO;
+	u32 IBO;
 	Vertex* Buffer;
 	Vertex* BufferPtr = nullptr;
-	unsigned int IndexCount = 0;
-	unsigned int QuadCount = 0;
-	unsigned int DrawCount = 0;
-	int MaxTextureUnits = 0;
-	int TextureUnit = 1;
+	u32 IndexCount = 0;
+	u32 QuadCount = 0;
+	u32 DrawCount = 0;
+	i32 MaxTextureUnits = 0;
+	i32 TextureUnit = 1;
 	Texture WhiteTexture;
-	std::unordered_map<int, int> TextureUnitCache;
+	std::unordered_map<i32, i32> TextureUnitCache;
 	Shader* CurrentShader;
 	Camera* CurrentCamera;
 };
@@ -46,8 +47,8 @@ public:
 	static void DrawQuad(const Vec2& pos, const Vec2& size, const Vec4& color);
 	static void DrawQuad(const Vec2& pos, const Vec2& size, const Texture& texture);
 
-	static const unsigned int GetDrawCount();
-	static const unsigned int GetQuadCount();
+	static const u32 GetDrawCount();
+	static const u32 GetQuadCount();
 
 	static Shader* GetShader();
 	static void SetShader(Shader* shader);

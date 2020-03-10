@@ -1,12 +1,14 @@
 #pragma once
+#include "Types.h"
+
 class Logger
 {
 public:
-	static void Trace(const char* message, ...);
-	static void Log(const char* message, ...);
-	static void Error(const char* message, ...);
-	static void Warn(const char* message, ...);
-	static void Fatal(const char* message, ...);
+	static void Trace(cstr message, ...);
+	static void Log(cstr message, ...);
+	static void Error(cstr message, ...);
+	static void Warn(cstr message, ...);
+	static void Fatal(cstr message, ...);
 };
 
 

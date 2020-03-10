@@ -1,10 +1,11 @@
 #pragma once
+#include "Types.h"
 #include <GLFW/glfw3.h>
 
 struct WindowConfig
 {
-	int width, height;
-	const char* title;
+	i32 width, height;
+	cstr title;
 };
 
 class Window

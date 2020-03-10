@@ -27,13 +27,13 @@ public:
 
 	i32 GetID() { return m_ID; }
 
-	i32 GetUniformLocation(const char* name);
+	i32 GetUniformLocation(cstr name);
 
-	void SetUniformInt(cstr name, int val);
-	void SetUniformFloat(cstr name, float x);
-	void SetUniformFloat(cstr name, float x, float y);
-	void SetUniformFloat(cstr name, float x, float y, float z);
-	void SetUniformFloat(cstr name, float x, float y, float z, float w);
+	void SetUniformInt(cstr name, i32 val);
+	void SetUniformFloat(cstr name, f32 x);
+	void SetUniformFloat(cstr name, f32 x, f32 y);
+	void SetUniformFloat(cstr name, f32 x, f32 y, f32 z);
+	void SetUniformFloat(cstr name, f32 x, f32 y, f32 z, f32 w);
 	void SetUniformVec2(cstr name, const Vec2& x);
 	void SetUniformVec3(cstr name, const Vec3& x);
 	void SetUniformVec4(cstr name, const Vec4& x);

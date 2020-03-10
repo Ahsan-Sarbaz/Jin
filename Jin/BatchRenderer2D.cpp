@@ -42,8 +42,8 @@ void BatchRenderer2D::Init()
 	glVertexAttribPointer(3, 1, GL_INT, false, sizeof(Vertex), (void*)offsetof(Vertex, texture));
 
 
-	unsigned int* indices = new unsigned int[MAX_IND_COUNT];
-	unsigned int offset = 0;
+	u32* indices = new u32[MAX_IND_COUNT];
+	u32 offset = 0;
 	for (size_t i = 0; i < MAX_IND_COUNT; i += 6)
 	{
 		indices[i + 0] = 0 + offset;
@@ -58,7 +58,7 @@ void BatchRenderer2D::Init()
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, state.IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * MAX_IND_COUNT, indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * MAX_IND_COUNT, indices, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 	delete[] indices;
@@ -72,8 +72,8 @@ void BatchRenderer2D::Init()
 
 	glUseProgram(state.CurrentShader->GetID());
 	auto  location = glGetUniformLocation(state.CurrentShader->GetID(), "u_textures");
-	int* samplers = new int[state.MaxTextureUnits];
-	for (int i = 0; i < state.MaxTextureUnits; ++i)
+	i32* samplers = new i32[state.MaxTextureUnits];
+	for (i32 i = 0; i < state.MaxTextureUnits; ++i)
 	{
 		samplers[i] = i;
 	}
@@ -164,7 +164,7 @@ void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture&
 	}
 
 	Vec4 color = {1,1,1,1};
-	int textureSlot = 0;
+	i32 textureSlot = 0;
 	if (state.TextureUnitCache.find(texture.GetID()) == state.TextureUnitCache.end())
 	{
 		//not found
@@ -209,12 +209,12 @@ void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture&
 	state.QuadCount++;
 }
 
-const unsigned int BatchRenderer2D::GetDrawCount()
+const u32 BatchRenderer2D::GetDrawCount()
 {
 	return state.DrawCount;
 }
 
-const unsigned int BatchRenderer2D::GetQuadCount()
+const u32 BatchRenderer2D::GetQuadCount()
 {
 	return state.QuadCount;
 }

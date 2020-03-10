@@ -19,7 +19,7 @@ public:
 
 	JIN_INLINE static Time* Get() { return m_instance; }
 
-	JIN_INLINE void SetDeltaTime(float _dt) { m_instance->dt = _dt; }
+	JIN_INLINE void SetDeltaTime(f32 _dt) { m_instance->dt = _dt; }
 
 	JIN_INLINE static f32 GetDeltaTime() { return m_instance->dt; }
 	JIN_INLINE static f32 GetDeltaTimeMilliSeconds() { return m_instance->dt * 1000.0f; }

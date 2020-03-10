@@ -3,40 +3,40 @@
 #include <stdio.h>
 #include <string>
 
-static void printMessage(const char* type, const char* message, va_list args)
+static void printMessage(cstr type, cstr message, va_list args)
 {
 	vprintf((std::string(type) + message + "\n").c_str(), args);
 }
 
-void Logger::Trace(const char* message, ...)
+void Logger::Trace(cstr message, ...)
 {
 	va_list args;
 	va_start(args, message);
 	printMessage("[TRACE] ", message, args);
 }
 
-void Logger::Log(const char* message, ...)
+void Logger::Log(cstr message, ...)
 {
 	va_list args;
 	va_start(args, message);
 	printMessage("[LOG] ", message, args);
 }
 
-void Logger::Error(const char* message, ...)
+void Logger::Error(cstr message, ...)
 {
 	va_list args;
 	va_start(args, message);
 	printMessage("[ERROR] ", message, args);
 }
 
-void Logger::Warn(const char* message, ...)
+void Logger::Warn(cstr message, ...)
 {
 	va_list args;
 	va_start(args, message);
 	printMessage("[Warn] ", message, args);
 }
 
-void Logger::Fatal(const char* message, ...)
+void Logger::Fatal(cstr message, ...)
 {
 	va_list args;
 	va_start(args, message);

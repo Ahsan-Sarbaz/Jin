@@ -7,6 +7,8 @@
 #include "BatchRenderer2D.h"
 #include "Logger.h"
 
+#include "stb_truetype.h"
+
 class MainLayer : public Layer
 {
 private:
@@ -14,6 +16,8 @@ private:
 	bool show_properties = true;
 	OrthographicCamera cam = OrthographicCamera(1920, 1080);
 	
+	Texture spriteSheet;
+
 public:
 	MainLayer()
 		:Layer("main_layer")
@@ -25,6 +29,8 @@ public:
 	{
 		BatchRenderer2D::Init();
 		BatchRenderer2D::SetCamera(&cam);
+
+		spriteSheet = Texture("textures/spritesheet.png", 0);
 	}
 
 	virtual void Update() override
@@ -52,23 +58,8 @@ public:
 		BatchRenderer2D::ResetStates();
 
 		BatchRenderer2D::Begin();
-
-		
-
-		float size = 5;
-		float gutter = size / 2;
-		float finalSize = size + gutter;
-
-		for (float y = 0; y < 1; y++)
-		{
-			for (float x = 0; x < 270000; x++)
-			{
-				float r = 5;
-				BatchRenderer2D::DrawQuad({ x + size * x + r, y + size * y + r }, { finalSize, finalSize }, { 1,0,1,1 });
-				
-				
-			}
-		}
+	
+		BatchRenderer2D::DrawQuad({ 0,0 }, { 500,500 }, spriteSheet);
 
 		BatchRenderer2D::End();
 
@@ -81,7 +72,7 @@ public:
 	}
 };
 
-int main()
+i32 main()
 {
 	Application app;
 	ApplicationConfiguration config = {};

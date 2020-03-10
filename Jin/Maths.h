@@ -8,12 +8,12 @@ struct Vec2
 	union
 	{
 
-		float data[2];
+		f32 data[2];
 
 		struct
 		{
-			float x;
-			float y;
+			f32 x;
+			f32 y;
 		};
 	};
 
@@ -70,15 +70,15 @@ struct Vec2
 		return *this;
 	}
 
-	float length() const
+	f32 length() const
 	{
 		return sqrt(x * x + y * y);
 	}
 
-	float distance(const Vec2& b) const
+	f32 distance(const Vec2& b) const
 	{
-		float diffX = x - b.x;
-		float diffY = y - b.y;
+		f32 diffX = x - b.x;
+		f32 diffY = y - b.y;
 		return sqrt((diffY * diffY) + (diffX * diffX));
 	}
 
@@ -99,20 +99,20 @@ struct Vec3
 	union
 	{
 
-		float data[3];
+		f32 data[3];
 
 		struct
 		{
-			float x;
-			float y;
-			float z;
+			f32 x;
+			f32 y;
+			f32 z;
 		};
 
 		struct
 		{
-			float r;
-			float g;
-			float b;
+			f32 r;
+			f32 g;
+			f32 b;
 		};
 
 	};
@@ -174,16 +174,16 @@ struct Vec3
 		return *this;
 	}
 
-	float length() const
+	f32 length() const
 	{
 		return sqrt(x * x + y * y + z * z);
 	}
 
-	float distance(const Vec3& b) const
+	f32 distance(const Vec3& b) const
 	{
-		float diffX = x - b.x;
-		float diffY = y - b.y;
-		float diffZ = z - b.z;
+		f32 diffX = x - b.x;
+		f32 diffY = y - b.y;
+		f32 diffZ = z - b.z;
 		return sqrt((diffY * diffY) + (diffX * diffX) + (diffZ * diffZ));
 	}
 
@@ -204,22 +204,22 @@ struct Vec4
 	union 
 	{
 		
-		float data[4];
+		f32 data[4];
 		
 		struct
 		{
-			float x;
-			float y;
-			float z;
-			float w;
+			f32 x;
+			f32 y;
+			f32 z;
+			f32 w;
 		};
 
 		struct
 		{
-			float r;
-			float g;
-			float b;
-			float a;
+			f32 r;
+			f32 g;
+			f32 b;
+			f32 a;
 		};
 		
 	};
@@ -285,17 +285,17 @@ struct Vec4
 		return *this;
 	}
 
-	float length() const
+	f32 length() const
 	{
 		return sqrt(x * x + y * y + z * z + w * w);
 	}
 
-	float distance(const Vec4& b) const
+	f32 distance(const Vec4& b) const
 	{
-		float diffX = x - b.x;
-		float diffY = y - b.y;
-		float diffZ = z - b.z;
-		float diffW = w - b.w;
+		f32 diffX = x - b.x;
+		f32 diffY = y - b.y;
+		f32 diffZ = z - b.z;
+		f32 diffW = w - b.w;
 		return sqrt((diffY * diffY) + (diffX * diffX) + (diffZ * diffZ) + (diffW * diffW));
 	}
 
@@ -314,26 +314,26 @@ struct Mat2
 {
 	union
 	{
-		float data[2 * 2];
-		float elements[2 * 2];
+		f32 data[2 * 2];
+		f32 elements[2 * 2];
 		Vec2 rows[2];
 	};
 
 	Mat2()
 	{
-		memset(elements, 0, 2 * 2 * sizeof(float));
+		memset(elements, 0, 2 * 2 * sizeof(f32));
 	}
 
-	Mat2(float diagonal)
+	Mat2(f32 diagonal)
 	{
-		memset(elements, 0, 2 * 2 * sizeof(float));
+		memset(elements, 0, 2 * 2 * sizeof(f32));
 		elements[0 + 0 * 2] = diagonal;
 		elements[1 + 1 * 2] = diagonal;
 	}
 
-	Mat2(float* data)
+	Mat2(f32* data)
 	{
-		memcpy(elements, data, 2 * 2 * sizeof(float));
+		memcpy(elements, data, 2 * 2 * sizeof(f32));
 	}
 
 	Mat2(const Vec2& row0, const Vec2& row1)
@@ -349,13 +349,13 @@ struct Mat2
 
 	Mat2 operator*(const Mat2& b)
 	{
-		float _data[2 * 2];
-		for (int row = 0; row < 2; row++)
+		f32 _data[2 * 2];
+		for (i32 row = 0; row < 2; row++)
 		{
-			for (int col = 0; col < 2; col++)
+			for (i32 col = 0; col < 2; col++)
 			{
-				float sum = 0;
-				for (int e = 0; e < 2; e++)
+				f32 sum = 0;
+				for (i32 e = 0; e < 2; e++)
 				{
 					sum += elements[e + row * 2] * b.elements[col + e * 2];
 				}

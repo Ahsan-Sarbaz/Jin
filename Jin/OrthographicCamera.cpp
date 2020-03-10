@@ -17,7 +17,7 @@ OrthographicCamera::OrthographicCamera(f32 width, f32 height)
 
 void OrthographicCamera::Tick()
 {
-	float dt = Time::GetDeltaTime();
+	f32 dt = Time::GetDeltaTime();
 	if (Input::IsKeyPressed(JinKey::KEY_LEFT) || Input::IsKeyPressed(JinKey::KEY_A))
 	{
 		m_position.x -= cos(glm::radians(m_rotation)) * m_translationSpeed * dt;
