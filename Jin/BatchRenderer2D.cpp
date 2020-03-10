@@ -66,7 +66,8 @@ void BatchRenderer2D::Init()
 	state.Buffer = new Vertex[MAX_VERT_COUNT];
 
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &state.MaxTextureUnits);
-	state.WhiteTexture = Texture(1, 1, 0xffffff);
+	u8 whiteTextureData[4] = { 0xff, 0xff, 0xff, 0xff };
+	state.WhiteTexture = Texture(&whiteTextureData);
 
 	state.WhiteTexture.SetSlot(0);
 
@@ -207,6 +208,67 @@ void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture&
 	state.IndexCount += 6;
 
 	state.QuadCount++;
+}
+
+void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture& texture, const Rect& rect)
+{
+	if (state.IndexCount >= MAX_IND_COUNT || state.TextureUnit >= state.MaxTextureUnits)
+	{
+		End();
+		Flush();
+		Begin();
+		state.TextureUnit = 0;
+	}
+
+	Vec4 color = { 1,1,1,1 };
+	i32 textureSlot = 0;
+	if (state.TextureUnitCache.find(texture.GetID()) == state.TextureUnitCache.end())
+	{
+		//not found
+		state.TextureUnitCache[texture.GetID()] = state.TextureUnit;
+		textureSlot = state.TextureUnit;
+		state.TextureUnit++;
+	}
+	else
+	{
+		textureSlot = state.TextureUnitCache[texture.GetID()];
+		state.TextureUnit++;
+	}
+
+	texture.Bind(textureSlot);
+
+	state.BufferPtr->position = { pos.x, pos.y, 0.0f };
+	state.BufferPtr->color = color;
+	state.BufferPtr->texCoord = { rect.x, rect.y };
+	state.BufferPtr->texture = textureSlot;
+	state.BufferPtr++;
+
+	state.BufferPtr->position = { pos.x + size.x, pos.y, 0.0f };
+	state.BufferPtr->color = color;
+	state.BufferPtr->texCoord = { rect.w, rect.y };
+	state.BufferPtr->texture = textureSlot;
+	state.BufferPtr++;
+
+	state.BufferPtr->position = { pos.x + size.x, pos.y + size.y, 0.0f };
+	state.BufferPtr->color = color;
+	state.BufferPtr->texCoord = { rect.w, rect.h };
+	state.BufferPtr->texture = textureSlot;
+	state.BufferPtr++;
+
+	state.BufferPtr->position = { pos.x, pos.y + size.y, 0.0f };
+	state.BufferPtr->color = color;
+	state.BufferPtr->texCoord = { rect.x, rect.h };
+	state.BufferPtr->texture = textureSlot;
+	state.BufferPtr++;
+
+	state.IndexCount += 6;
+
+	state.QuadCount++;
+}
+
+void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const SpriteSheet& spriteSheet, u32 cell)
+{
+	DrawQuad(pos, size, *spriteSheet.GetTexture(), spriteSheet.GetSpriteRect(cell));
 }
 
 const u32 BatchRenderer2D::GetDrawCount()

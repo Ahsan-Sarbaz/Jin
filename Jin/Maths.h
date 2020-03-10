@@ -1,7 +1,30 @@
 #pragma once
 #include <cmath>
+#include <cstring>
 
 #pragma pack(push, 1)
+
+struct Rect
+{
+	f32 x;
+	f32 y;
+	f32 w;
+	f32 h;
+
+	Rect MapToRect(const Rect& b) const
+	{
+		Rect res = {};
+		if (b.x > 0)
+			res.x = x / b.x;
+		if (b.y > 0)
+			res.y = x / b.y;
+		if (b.w > 0)
+			res.w = w / b.w;
+		if (b.h > 0)
+			res.h = h / b.h;
+		return res;
+	}
+};
 
 struct Vec2
 {

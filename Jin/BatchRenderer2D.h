@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Maths.h"
+#include "SpriteSheet.h"
 
 struct Vertex
 {
@@ -46,6 +47,8 @@ public:
 
 	static void DrawQuad(const Vec2& pos, const Vec2& size, const Vec4& color);
 	static void DrawQuad(const Vec2& pos, const Vec2& size, const Texture& texture);
+	static void DrawQuad(const Vec2& pos, const Vec2& size, const Texture& texture, const Rect& rect);
+	static void DrawQuad(const Vec2& pos, const Vec2& size, const SpriteSheet& spriteSheet, u32 cell);
 
 	static const u32 GetDrawCount();
 	static const u32 GetQuadCount();

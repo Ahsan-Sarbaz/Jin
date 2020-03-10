@@ -6,6 +6,7 @@
 #include "Light.h"
 #include "BatchRenderer2D.h"
 #include "Logger.h"
+#include "SpriteSheet.h"
 
 #include "stb_truetype.h"
 
@@ -14,9 +15,10 @@ class MainLayer : public Layer
 private:
 	Vec4 clearColor = { 0.8f,0.8f,0.8f,1 };
 	bool show_properties = true;
-	OrthographicCamera cam = OrthographicCamera(1920, 1080);
+	OrthographicCamera cam = OrthographicCamera(1280, 720);
 	
-	Texture spriteSheet;
+	Texture tex;
+	SpriteSheet spriteSheet;
 
 public:
 	MainLayer()
@@ -30,7 +32,8 @@ public:
 		BatchRenderer2D::Init();
 		BatchRenderer2D::SetCamera(&cam);
 
-		spriteSheet = Texture("textures/spritesheet.png", 0);
+		tex= Texture("textures/spritesheet.png", 0);
+		spriteSheet = SpriteSheet(&tex, 70.0f, 71.583f);
 	}
 
 	virtual void Update() override
@@ -40,7 +43,7 @@ public:
 
 		cam.Tick();
 
-		if (show_properties)
+		if (!show_properties)
 		{
 			ImGui::Begin("Properties", &show_properties);
 
@@ -59,8 +62,16 @@ public:
 
 		BatchRenderer2D::Begin();
 	
-		BatchRenderer2D::DrawQuad({ 0,0 }, { 500,500 }, spriteSheet);
-
+		int index = 1;
+		for (u32 y = 0; y < 12; y++)
+		{
+			for (u32 x = 0; x < 12; x++)
+			{
+				BatchRenderer2D::DrawQuad({ 70 * (f32)x, 70 * (f32)y }, {60, 60}, spriteSheet, index);
+				index++;
+			}
+		}
+		
 		BatchRenderer2D::End();
 
 		BatchRenderer2D::Flush();
@@ -77,8 +88,8 @@ i32 main()
 	Application app;
 	ApplicationConfiguration config = {};
 	
-	config.width = 1920;
-	config.height = 1080;
+	config.width = 1280;
+	config.height = 720;
 	config.title = "Window";
 	config.vsync = 0;
 

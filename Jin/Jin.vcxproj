@@ -92,6 +92,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Transform.h" />
