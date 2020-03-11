@@ -15,7 +15,7 @@ SpriteSheet::SpriteSheet(Texture* t, f32 cellW, f32 cellH)
 	u32 numberPerRow = m_texWidth/ m_cellWidth;
 	u32 numberPerCol = m_texHeight/ m_cellHeight;
 
-	i32 id = 1;
+	i32 id = 0;
 
 	for (u32 y = 0; y < numberPerCol; y++)
 	{

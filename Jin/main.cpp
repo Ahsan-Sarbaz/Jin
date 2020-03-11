@@ -6,6 +6,7 @@
 #include "Light.h"
 #include "BatchRenderer2D.h"
 #include "Logger.h"
+#include "Time.h"
 #include "SpriteSheet.h"
 
 #include "stb_truetype.h"
@@ -42,12 +43,19 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		cam.Tick();
+		
+		static float time = 0.0f;
+		time += Time::GetDeltaTime();
+		
+		static float index = 0;
 
-		if (!show_properties)
+		if (show_properties)
 		{
 			ImGui::Begin("Properties", &show_properties);
 
 			ImGui::Text("Framerate : %f", ImGui::GetIO().Framerate);
+			ImGui::Text("Time : %f", time);
+			ImGui::Text("Index: %f", index);
 
 			ImGui::ColorEdit4("Clear Color", clearColor.data);
 
@@ -62,16 +70,15 @@ public:
 
 		BatchRenderer2D::Begin();
 	
-		int index = 1;
-		for (u32 y = 0; y < 12; y++)
+		BatchRenderer2D::DrawQuad({ 0,0 }, { 100,100 }, spriteSheet, (u32)index);
+		if(time > 1)
 		{
-			for (u32 x = 0; x < 12; x++)
-			{
-				BatchRenderer2D::DrawQuad({ 70 * (f32)x, 70 * (f32)y }, {60, 60}, spriteSheet, index);
-				index++;
-			}
+			float perFrameTime = 1.0f / 8.0f;
+			index += perFrameTime * Time::GetDeltaTimeMilliSeconds();
+			if (index > 8)
+				index = 0;
 		}
-		
+
 		BatchRenderer2D::End();
 
 		BatchRenderer2D::Flush();
