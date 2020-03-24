@@ -3,20 +3,26 @@
 #include "Types.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #include <map>
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 #include "OrthographicCamera.h"
 #include "Window.h"
 #include "Layer.h"
+#include "Jin_imgui.h"
+#include "DX11.h"
 
+enum class GraphicsAPI
+{
+	DX11,
+	OpenGL
+};
 
 struct ApplicationConfiguration
 {
 	i32 width, height;
 	cstr title;
 	bool vsync;
+	GraphicsAPI api;
 };
 
 class Application
@@ -40,7 +46,8 @@ public:
 	
 	void AddLayer(Layer* layer);
 	void RemoveLayer(Layer* layer);
-	const Window& GetWindow() const { return m_window; }
+	JIN_INLINE const Window& GetWindow() const { return m_window; }
+	JIN_INLINE static const ApplicationConfiguration GetConfig() { return m_instance->m_appConfig; }
 
 private:
 	bool InitGLEW();

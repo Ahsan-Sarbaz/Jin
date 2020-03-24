@@ -1,4 +1,5 @@
 #include "SpriteSheet.h"
+#include "Application.h"
 
 SpriteSheet::SpriteSheet()
 {
@@ -7,6 +8,9 @@ SpriteSheet::SpriteSheet()
 SpriteSheet::SpriteSheet(Texture* t, f32 cellW, f32 cellH)
 	:m_texture(t), m_cellWidth(cellW), m_cellHeight(cellH)
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	m_texWidth = m_texture->GetWidth();
 	m_texHeight = m_texture->GetHeight();
 

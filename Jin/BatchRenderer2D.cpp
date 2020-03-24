@@ -1,6 +1,7 @@
 #include "BatchRenderer2D.h"
 #include <GL/glew.h>
 #include <glm/ext/matrix_transform.hpp>
+#include "Application.h"
 
 #define MAX_QUAD_COUNT 10000
 #define MAX_VERT_COUNT MAX_QUAD_COUNT * 4
@@ -10,6 +11,8 @@ static RendererState state = {};
 
 void BatchRenderer2D::Init()
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
 	if (state.Initiated)
 	{
 		return;
@@ -85,17 +88,23 @@ void BatchRenderer2D::Init()
 
 void BatchRenderer2D::Shutdown()
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
 	delete state.CurrentShader;
 	delete[] state.Buffer;
 }
 
 void BatchRenderer2D::Begin()
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
 	state.BufferPtr = state.Buffer;
 }
 
 void BatchRenderer2D::End()
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
 	GLsizeiptr size = (unsigned char*)state.BufferPtr - (unsigned char*)state.Buffer;
 	glBindBuffer(GL_ARRAY_BUFFER, state.VBO);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, size, state.Buffer);
@@ -103,6 +112,9 @@ void BatchRenderer2D::End()
 
 void BatchRenderer2D::Flush()
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	if (state.QuadCount == 0)
 		return;
 	state.CurrentShader->Bind();
@@ -116,6 +128,9 @@ void BatchRenderer2D::Flush()
 
 void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Vec4& color)
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	if (state.IndexCount >= MAX_IND_COUNT)
 	{
 		End();
@@ -156,6 +171,9 @@ void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Vec4& co
 
 void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture& texture)
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	if (state.IndexCount >= MAX_IND_COUNT || state.TextureUnit >= state.MaxTextureUnits)
 	{
 		End();
@@ -212,6 +230,9 @@ void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture&
 
 void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture& texture, const Rect& rect)
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	if (state.IndexCount >= MAX_IND_COUNT || state.TextureUnit >= state.MaxTextureUnits)
 	{
 		End();
@@ -268,6 +289,9 @@ void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const Texture&
 
 void BatchRenderer2D::DrawQuad(const Vec2& pos, const Vec2& size, const SpriteSheet& spriteSheet, u32 cell)
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	DrawQuad(pos, size, *spriteSheet.GetTexture(), spriteSheet.GetSpriteRect(cell));
 }
 

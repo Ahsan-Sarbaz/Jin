@@ -2,9 +2,13 @@
 #include <GL/glew.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include "Application.h"
 
 Texture::Texture(void* data)
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	GLenum internalFormat = GL_RGBA8, dataFormat = GL_RGBA;
 	
 	glGenTextures(1, &m_Id);
@@ -23,6 +27,9 @@ Texture::Texture(void* data)
 
 Texture::Texture(cstr filePath, bool flip)
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	stbi_set_flip_vertically_on_load(flip);
 	stbi_uc* data = stbi_load(filePath, &m_width, &m_height, &m_channels, 0);
 	
@@ -63,6 +70,9 @@ Texture::Texture(cstr filePath, bool flip)
 
 void Texture::Bind(u32 slot) const 
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	if (!m_bound)
 	{
 		m_bound = true;
@@ -73,5 +83,8 @@ void Texture::Bind(u32 slot) const
 
 void Texture::Unbind()
 {
+	if (Application::GetConfig().api != GraphicsAPI::OpenGL)
+		return;
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

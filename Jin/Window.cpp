@@ -17,6 +17,7 @@ bool Window::Init(const WindowConfig& config)
 
 	glfwMakeContextCurrent(m_windowHandle);
 
+	m_windowHandleWin32 = glfwGetWin32Window(m_windowHandle);
 	return true;
 }
 

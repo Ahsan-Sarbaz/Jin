@@ -15,9 +15,7 @@ Application::Application()
 Application::~Application()
 {
 #if JIN_IMGUI
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	ShutdownJinImGui();
 #endif // JIN_NO_IMGUI
 }
 
@@ -39,26 +37,22 @@ bool Application::Init(const ApplicationConfiguration& config)
 	
 	if (!m_window.Init(windowConfig)) return false;
 	
-	if (!InitGLEW()) return false;
+	if (m_appConfig.api == GraphicsAPI::OpenGL)
+		if (!InitGLEW()) return false;
 
 	m_isOpen = true;
 
 	glfwSetWindowSizeCallback(m_window.GetHandle(), window_size_callback);
 
-#if JIN_IMGUI
-	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-	
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
+	DX11Config dx11Config = {};
+	dx11Config.width = m_appConfig.width;
+	dx11Config.height = m_appConfig.height;
+	dx11Config.windowHanlde = m_window.GetHandleWin32();
+	DX11::Init(dx11Config);
 
-	ImGui_ImplGlfw_InitForOpenGL(m_window.GetHandle(), true);
-	ImGui_ImplOpenGL3_Init("#version 130");
-#endif // JIN_NO_IMGUI
+#if JIN_IMGUI
+	InitJinImgui((IMGUIGraphicsAPI)m_appConfig.api, DX11::GetDevice(), DX11::GetContext(), m_window.GetHandle(), m_window.GetHandleWin32());
+#endif // JIN_IMGUI
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -93,9 +87,7 @@ bool Application::Run()
 		m_appConfig.width = m_window.GetWindowConfig().width;
 		m_appConfig.height = m_window.GetWindowConfig().height;
 #if JIN_IMGUI
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		NewFrameJinImGui();
 #endif // JIN_NO_IMGUI
 
 		for (auto layer : m_layers)
@@ -103,12 +95,33 @@ bool Application::Run()
 			layer.second->Update();
 		}
 
+
 #if JIN_IMGUI
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		RenderJinImGui();
 #endif // JIN_NO_IMGUI
 
-		glfwSwapBuffers(m_window.GetHandle());
+		auto renderTargetView = DX11::GetRenderTarget();
+		float clearColor[4] = {1,0,0,1};
+		DX11::GetContext()->OMSetRenderTargets(1, &renderTargetView, nullptr);
+		DX11::GetContext()->ClearRenderTargetView(DX11::GetRenderTarget(), clearColor);
+
+
+#if JIN_IMGUI
+		RenderDrawDataJinImGui();
+#endif // JIN_NO_IMGUI
+
+
+		switch (m_appConfig.api)
+		{
+		case GraphicsAPI::DX11:
+			DX11::GetSwaChain()->Present(0, 0);
+			break;
+		case GraphicsAPI::OpenGL:
+			glfwSwapBuffers(m_window.GetHandle());
+			break;
+		default:
+			break;
+		}
 	}
 
 	for (auto layer : m_layers)

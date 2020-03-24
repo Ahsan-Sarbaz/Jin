@@ -8,7 +8,6 @@
 #include "Logger.h"
 #include "Time.h"
 #include "SpriteSheet.h"
-
 #include "stb_truetype.h"
 
 class MainLayer : public Layer
@@ -42,7 +41,7 @@ public:
 		glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		cam.Tick();
+		//cam.Tick();
 		
 		float time = Time::GetSeconds();
 		static float index = 0;
@@ -63,14 +62,14 @@ public:
 		}
 
 		BatchRenderer2D::ResetStates();
-
+		
 		BatchRenderer2D::Begin();
-	
+		
 		BatchRenderer2D::DrawQuad({ 0,0 }, { 400, 400 }, spriteSheet, (u32)index);
 		// TODO:: Spritesheet animation
-
+		
 		BatchRenderer2D::End();
-
+		
 		BatchRenderer2D::Flush();
 	}
 
@@ -89,6 +88,7 @@ i32 main()
 	config.height = 720;
 	config.title = "Window";
 	config.vsync = 0;
+	config.api = GraphicsAPI::DX11;
 
 	if (!app.Init(config))
 	{
