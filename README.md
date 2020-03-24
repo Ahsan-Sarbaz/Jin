@@ -2,13 +2,23 @@
 The Jin Game Engine.
 
 # Feature
-+ Basic Quad Rendering
-+ Basic Textures
-+ Basic Transforms
-+ Basic Shaders
-+ Basic Input (keyboard, mouse)
-+ Basic Camera
-+ Basic Materials
++ 2D Batch Rendering Quad
++ SpriteSheet Rendering
++ Input (KB, Mouse)
++ Layers
++ OpenGL and DirectX 11 Backend (DX11 is in works)
+
+# Coming Features
++ SpriteSheet Animations
++ 2D Lighting
++ Runtime Graphics API Changing
++ Game Code Hot Reloading
++ Sound
++ Particle System
++ Text Rendering
++ UI System
++ Box2D Integration
++ ECS
 
 # Build
 To Build Successfully.
