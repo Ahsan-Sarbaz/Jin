@@ -33,8 +33,8 @@ public:
 		BatchRenderer2D::Init();
 		BatchRenderer2D::SetCamera(&cam);
 
-		tex= Texture("textures/spritesheet.png", 0);
-		spriteSheet = SpriteSheet(&tex, 70.0f, 71.583f);
+		tex= Texture("textures/explosion.png", 0);
+		spriteSheet = SpriteSheet(&tex, 99.888f, 95.222f);
 	}
 
 	virtual void Update() override
@@ -44,19 +44,15 @@ public:
 
 		cam.Tick();
 		
-		static float time = 0.0f;
-		time += Time::GetDeltaTime();
-		
+		float time = Time::GetSeconds();
 		static float index = 0;
-
+		
 		if (show_properties)
 		{
 			ImGui::Begin("Properties", &show_properties);
 
 			ImGui::Text("Framerate : %f", ImGui::GetIO().Framerate);
 			ImGui::Text("Time : %f", time);
-			ImGui::Text("Index: %f", index);
-
 			ImGui::ColorEdit4("Clear Color", clearColor.data);
 
 			ImGui::Text("Draw Calls %d", BatchRenderer2D::GetDrawCount());
@@ -70,14 +66,8 @@ public:
 
 		BatchRenderer2D::Begin();
 	
-		BatchRenderer2D::DrawQuad({ 0,0 }, { 100,100 }, spriteSheet, (u32)index);
-		if(time > 1)
-		{
-			float perFrameTime = 1.0f / 8.0f;
-			index += perFrameTime * Time::GetDeltaTimeMilliSeconds();
-			if (index > 8)
-				index = 0;
-		}
+		BatchRenderer2D::DrawQuad({ 0,0 }, { 400, 400 }, spriteSheet, (u32)index);
+		// TODO:: Spritesheet animation
 
 		BatchRenderer2D::End();
 

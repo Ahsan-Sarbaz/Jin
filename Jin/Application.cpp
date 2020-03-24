@@ -84,6 +84,7 @@ bool Application::Run()
 		f32 dt = time - m_lastFrameTime;
 		m_lastFrameTime = time;
 		Time::Get()->SetDeltaTime(dt);
+		Time::Tick();
 
 
 		m_isOpen = !glfwWindowShouldClose(m_window.GetHandle());
