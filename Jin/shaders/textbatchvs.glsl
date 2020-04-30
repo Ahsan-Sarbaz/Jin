@@ -9,12 +9,10 @@ uniform mat4 u_ViewProjection;
 
 out vec4 v_color;
 out vec2 v_texCoord;
-out float v_texSlot;
 
 void main()
 {
 	v_color = color;
 	v_texCoord = texCoord;
-	v_texSlot = float(texture);
 	gl_Position = u_ViewProjection * vec4(position, 1);
 }

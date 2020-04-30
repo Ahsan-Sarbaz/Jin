@@ -1,13 +1,13 @@
 #pragma once
-#include "glm/glm.hpp"
+#include "pch.h"
 
 class Light
 {
 	glm::vec3 m_LightPosition;
 	glm::vec3 m_LightColor;
-public:
+    public:
 	Light();
-
+    
 	void SetLightPosition(const glm::vec3& lightPos) { m_LightPosition = lightPos; }
 	const glm::vec3& GetLightPosition() { return m_LightPosition; }
 	glm::vec3& GetLightPositionRef() { return m_LightPosition; }

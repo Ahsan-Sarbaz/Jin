@@ -1,11 +1,9 @@
 #pragma once
-#include "Types.h"
-#include "Defines.h"
-#include "Maths.h"
+#include "pch.h"
 
 class Texture
 {
-private:
+    private:
 	u32 m_Id;
 	mutable bool m_bound =  false;
 	mutable u32 m_slot = 0;
@@ -13,19 +11,20 @@ private:
 	i32 m_height;
 	i32 m_channels;
 	Rect m_textureRect = {0,0,1,1};
-
-public:
+    
+    public:
 	Texture()
 	{
 		m_Id = 0;
 	}
-
+    
 	Texture(void* data);
+    Texture(void* data, int w, int h, int format, int internal);
 	Texture(cstr filePath, bool flip = 1);
-
+    
 	void Bind(u32 slot = 0) const;
 	void Unbind();
-
+    
 	JIN_INLINE u32 GetID() const { return m_Id; }
 	JIN_INLINE u32 GetSlot() const { return m_slot; }
 	JIN_INLINE void SetSlot(u32 slot) const { m_slot = slot; }

@@ -1,10 +1,5 @@
 #pragma once
-#include "Types.h"
-#include <GL/glew.h>
-#include <string>
-#include <unordered_map>
-#include <glm/glm.hpp>
-#include "Maths.h"
+#include "pch.h"
 
 enum class ShaderType
 {
@@ -15,20 +10,20 @@ enum class ShaderType
 
 class Shader
 {
-private:
+    private:
 	i32 m_ID;
 	std::unordered_map<cstr, i32> m_uniformCache;
 	bool m_bound;
-public:
+    public:
 	Shader(cstr vspath, cstr fspath);
-
+    
 	void Bind();
 	void Unbind();
-
+    
 	i32 GetID() { return m_ID; }
-
+    
 	i32 GetUniformLocation(cstr name);
-
+    
 	void SetUniformInt(cstr name, i32 val);
 	void SetUniformFloat(cstr name, f32 x);
 	void SetUniformFloat(cstr name, f32 x, f32 y);
@@ -40,8 +35,8 @@ public:
 	void SetUniformMat2(cstr name, const glm::mat2& x);
 	void SetUniformMat3(cstr name, const glm::mat3& x);
 	void SetUniformMat4(cstr name, const glm::mat4& x);
-
-private:
+    
+    private:
 	const std::string ReadShaderFile(cstr path);
 	i32 CompileShader(cstr source, ShaderType Type);
 };

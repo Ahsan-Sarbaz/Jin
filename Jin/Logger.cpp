@@ -1,7 +1,5 @@
+#include "pch.h"
 #include "Logger.h"
-#include <stdarg.h>
-#include <stdio.h>
-#include <string>
 
 static void printMessage(cstr type, cstr message, va_list args)
 {

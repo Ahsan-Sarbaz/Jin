@@ -1,22 +1,21 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "pch.h"
 
 class Transform
 {
-private:
+    private:
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;
 	glm::vec3 m_scale;
 	glm::mat4 m_transform;
-
-public:
+    
+    public:
 	Transform();
-
+    
 	void UpdateMatrix();
-
+    
 	inline const glm::mat4& GetTransform() const { return m_transform; }
-
+    
 	inline const glm::vec3 GetPosition() const { return m_position; };
 	inline const glm::vec3 GetRotation() const { return m_rotation; };
 	inline const glm::vec3 GetScale() const { return m_scale; };

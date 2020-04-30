@@ -1,82 +1,105 @@
-#include <iostream>
-#include "Application.h"
-#include <glm\gtc\type_ptr.hpp>
-#include "Input.h"
-#include "PerspectiveCamera.h"
-#include "Light.h"
-#include "BatchRenderer2D.h"
-#include "Logger.h"
-#include "Time.h"
-#include "SpriteSheet.h"
+#include "pch.h"
+#include "Jin.h"
 
-#include "stb_truetype.h"
-
-class MainLayer : public Layer
+class DebugLayer: public Layer
 {
-private:
-	Vec4 clearColor = { 0.8f,0.8f,0.8f,1 };
+	private:
 	bool show_properties = true;
-	OrthographicCamera cam = OrthographicCamera(1280, 720);
+	Vec4* clearColor;
+	Vec2 mouse;
 	
-	Texture tex;
-	SpriteSheet spriteSheet;
-
-public:
-	MainLayer()
-		:Layer("main_layer")
+	public:
+	DebugLayer()
+		:Layer("debug_layer")
 	{
-
+		
 	}
-
+	
 	virtual void Start() override
 	{
-		BatchRenderer2D::Init();
-		BatchRenderer2D::SetCamera(&cam);
-
-		tex= Texture("textures/explosion.png", 0);
-		spriteSheet = SpriteSheet(&tex, 99.888f, 95.222f);
+		clearColor = (Vec4*)LayerSharedData::Get("clearColor");
 	}
-
+	
 	virtual void Update() override
 	{
-		glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		cam.Tick();
-		
-		float time = Time::GetSeconds();
-		static float index = 0;
+		clearColor = (Vec4*)LayerSharedData::Get("clearColor");
 		
 		if (show_properties)
 		{
 			ImGui::Begin("Properties", &show_properties);
-
 			ImGui::Text("Framerate : %f", ImGui::GetIO().Framerate);
-			ImGui::Text("Time : %f", time);
-			ImGui::ColorEdit4("Clear Color", clearColor.data);
-
+			ImGui::ColorEdit4("Clear Color", clearColor->data);
 			ImGui::Text("Draw Calls %d", BatchRenderer2D::GetDrawCount());
 			ImGui::Text("Quad Count %d", BatchRenderer2D::GetQuadCount());
-
-
 			ImGui::End();
 		}
-
-		BatchRenderer2D::ResetStates();
-
-		BatchRenderer2D::Begin();
-	
-		BatchRenderer2D::DrawQuad({ 0,0 }, { 400, 400 }, spriteSheet, (u32)index);
-		// TODO:: Spritesheet animation
-
-		BatchRenderer2D::End();
-
-		BatchRenderer2D::Flush();
 	}
-
+	
 	virtual void End() override
 	{
+		
+	}
+};
 
+class MainLayer : public Layer
+{
+	private:
+	Vec4 clearColor = { 0.8f,0.8f,0.8f,1 };
+	OrthographicCamera cam = OrthographicCamera(1280, 720);
+	
+	Texture runningTexture;
+	Texture explosionTexture;
+	
+	SpriteSheet runningSpriteSheet;
+	SpriteSheet explosionSpriteSheet;
+	
+	Animation runningAnim;
+	
+	public:
+	MainLayer()
+		:Layer("main_layer")
+	{
+		
+	}
+	
+	virtual void Start() override
+	{
+		BatchRenderer2D::Init();
+		BatchRenderer2D::SetCamera(&cam);
+		
+		runningTexture = Texture("textures/running.png", 0);
+		
+		runningSpriteSheet = SpriteSheet(&runningTexture, 108.0f, 140.0f);
+		
+		runningAnim = Animation(&runningSpriteSheet, 0, 8, 0.5f);
+		
+		LayerSharedData::Set("clearColor", &clearColor);
+	}
+	
+	virtual void Update() override
+	{
+		
+		BatchRenderer2D::SetClearColor(clearColor);
+		BatchRenderer2D::Clear();
+		
+		cam.Tick();
+		
+		float time = Time::GetSeconds();
+		
+		runningAnim.Update();
+		
+		BatchRenderer2D::ResetStates();
+		
+		BatchRenderer2D::Begin();
+		
+		runningAnim.Draw({0,0}, {100, 100});
+		BatchRenderer2D::DrawText("This is the test of a big time nigger", {120, 120}, {0,0,0,1});
+		
+		BatchRenderer2D::End();
+	}
+	
+	virtual void End() override
+	{
 	}
 };
 
@@ -85,18 +108,24 @@ i32 main()
 	Application app;
 	ApplicationConfiguration config = {};
 	
-	config.width = 1280;
-	config.height = 720;
-	config.title = "Window";
-	config.vsync = 0;
-
+	config.Width = 1280;
+	config.Height = 720;
+	config.Title = "Window";
+	config.Vsync = 1;
+	
 	if (!app.Init(config))
 	{
 		JIN_FATAL("Application Failed to Initialize");
 		return EXIT_FAILURE;
 	}
+	
+	const u8* renderer = glGetString(GL_RENDERER);
+	const u8* version = glGetString(GL_VERSION);
+	Logger::Trace("%s , %s", renderer, version);
+	
+	app.AddLayer(new DebugLayer);
 	app.AddLayer(new MainLayer);
-
+	
 	if (!app.Run())
 	{
 		JIN_FATAL("Application Failed to Run");

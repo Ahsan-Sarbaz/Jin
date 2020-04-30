@@ -1,9 +1,9 @@
 #pragma once
-#include "Types.h"
+#include "pch.h"
 
 class Logger
 {
-public:
+    public:
 	static void Trace(cstr message, ...);
 	static void Log(cstr message, ...);
 	static void Error(cstr message, ...);

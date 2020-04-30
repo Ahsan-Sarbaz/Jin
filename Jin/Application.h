@@ -1,48 +1,42 @@
 #pragma once
-#include "Defines.h"
-#include "Types.h"
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <map>
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "pch.h"
 #include "OrthographicCamera.h"
-#include "Window.h"
 #include "Layer.h"
 
 
 struct ApplicationConfiguration
 {
-	i32 width, height;
-	cstr title;
-	bool vsync;
+	i32 Width, Height;
+	cstr Title;
+	bool Vsync;
 };
 
 class Application
 {
-private:
+    private:
 	static Application* m_instance;
 	ApplicationConfiguration m_appConfig;
-	Window m_window;
+	GLFWwindow* m_window;
 	bool m_isOpen;
 	f32 m_lastFrameTime = 0.0f;
-	std::map<cstr, Layer*> m_layers;
-
-public:
+	std::unordered_map<cstr, Layer*> m_layers;
+    std::unordered_map<cstr, void*> m_layersSharedData;
+    
+    public:
 	Application();
 	~Application();
-
+    
 	static Application* Get() { return m_instance; }
-
-	bool Init(const ApplicationConfiguration& config);
-	bool Run();
-	
-	void AddLayer(Layer* layer);
-	void RemoveLayer(Layer* layer);
-	const Window& GetWindow() const { return m_window; }
-
-private:
-	bool InitGLEW();
-	bool InitGLFW();
+    
+    bool Init(const ApplicationConfiguration& config);
+    bool Run();
+    
+    void AddLayer(Layer* layer);
+    void RemoveLayer(Layer* layer);
+    GLFWwindow* GetWindow() const { return m_window; }
+    ApplicationConfiguration* GetConfig() { return &m_appConfig; }
+    
+    private:
+    bool InitGLEW();
+    bool InitGLFW();
 };
