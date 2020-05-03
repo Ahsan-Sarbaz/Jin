@@ -76,15 +76,13 @@ Texture::Texture(cstr filePath, bool flip)
 
 void Texture::Bind(u32 slot) const
 {
-	if (!m_bound)
-	{
-		m_bound = true;
+//		m_bound = true;
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_Id);
-	}
 }
 
 void Texture::Unbind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
+	m_bound = false;
 }

@@ -9,5 +9,5 @@ uniform sampler2D u_fontTexture;
 void main()
 {	
 	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(u_fontTexture, v_texCoord).r);
-    FinalColor = vec4(v_color.rgb, 1.0) * sampled;
+    	FinalColor = v_color * sampled;
 }

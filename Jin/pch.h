@@ -15,6 +15,7 @@
 #include <string>
 #include <imgui.h>
 #include <cmath>
+#include <array>
 #include <fstream>
 #include <sstream>
 #include <stdarg.h>

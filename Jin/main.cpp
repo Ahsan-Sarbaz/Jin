@@ -24,13 +24,17 @@ class DebugLayer: public Layer
 	{
 		clearColor = (Vec4*)LayerSharedData::Get("clearColor");
 		
+		static float boundTexture;
+		glGetFloatv(GL_TEXTURE_BINDING_2D, &boundTexture);
+
 		if (show_properties)
 		{
 			ImGui::Begin("Properties", &show_properties);
 			ImGui::Text("Framerate : %f", ImGui::GetIO().Framerate);
 			ImGui::ColorEdit4("Clear Color", clearColor->data);
-			ImGui::Text("Draw Calls %d", BatchRenderer2D::GetDrawCount());
-			ImGui::Text("Quad Count %d", BatchRenderer2D::GetQuadCount());
+			ImGui::Text("Draw Calls %d", RendererStats::GetDrawCount());
+			ImGui::Text("Quad Count %d", RendererStats::GetQuadCount());
+			ImGui::Text("Texture Bound %f", boundTexture);
 			ImGui::End();
 		}
 	}
@@ -45,14 +49,10 @@ class MainLayer : public Layer
 {
 	private:
 	Vec4 clearColor = { 0.8f,0.8f,0.8f,1 };
-	OrthographicCamera cam = OrthographicCamera(1280, 720);
+	OrthographicCamera cam = OrthographicCamera(800, 600);
 	
 	Texture runningTexture;
-	Texture explosionTexture;
-	
 	SpriteSheet runningSpriteSheet;
-	SpriteSheet explosionSpriteSheet;
-	
 	Animation runningAnim;
 	
 	public:
@@ -66,7 +66,7 @@ class MainLayer : public Layer
 	{
 		BatchRenderer2D::Init();
 		BatchRenderer2D::SetCamera(&cam);
-		
+				
 		runningTexture = Texture("textures/running.png", 0);
 		
 		runningSpriteSheet = SpriteSheet(&runningTexture, 108.0f, 140.0f);
@@ -88,14 +88,12 @@ class MainLayer : public Layer
 		
 		runningAnim.Update();
 		
-		BatchRenderer2D::ResetStates();
+		RendererStats::ResetStats();
 		
 		BatchRenderer2D::Begin();
-		
 		runningAnim.Draw({0,0}, {100, 100});
-		BatchRenderer2D::DrawText("This is the test of a big time nigger", {120, 120}, {0,0,0,1});
-		
 		BatchRenderer2D::End();
+
 	}
 	
 	virtual void End() override
@@ -108,8 +106,8 @@ i32 main()
 	Application app;
 	ApplicationConfiguration config = {};
 	
-	config.Width = 1280;
-	config.Height = 720;
+	config.Width = 800;
+	config.Height = 600;
 	config.Title = "Window";
 	config.Vsync = 1;
 	
@@ -123,7 +121,7 @@ i32 main()
 	const u8* version = glGetString(GL_VERSION);
 	Logger::Trace("%s , %s", renderer, version);
 	
-	app.AddLayer(new DebugLayer);
+	//app.AddLayer(new DebugLayer);
 	app.AddLayer(new MainLayer);
 	
 	if (!app.Run())

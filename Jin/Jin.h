@@ -21,5 +21,6 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "RendererStats.h"
 
 #endif //_JIN_H

@@ -17,7 +17,7 @@ class SpriteSheet
 	SpriteSheet(Texture* t, f32 cellW, f32 cellH);
     
 	JIN_INLINE const Rect& GetSpriteRect(u32 id) const { return m_rects.find(id)->second; }
-	JIN_INLINE const Texture* GetTexture() const { return m_texture; };
+	JIN_INLINE Texture* GetTexture() const { return m_texture; };
 	JIN_INLINE const f32 GetTextureWidth() const { return m_texWidth; };
 	JIN_INLINE const f32 GetTextureHeight() const { return m_texHeight; };
 	JIN_INLINE const f32 GetCellWidth() const { return m_cellWidth; };

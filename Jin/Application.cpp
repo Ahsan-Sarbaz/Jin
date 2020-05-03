@@ -3,7 +3,7 @@
 #include "Time.h"
 #include "Logger.h"
 
-#define JIN_IMGUI 1
+#define JIN_IMGUI 0
 
 Application* Application::m_instance = nullptr;
 
